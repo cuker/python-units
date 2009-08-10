@@ -69,4 +69,4 @@ class LeafUnit(object):
         if compatible(self, quantity.unit):
             return Quantity(quantity.num * quantity.unit.squeeze(), self)
         else:
-            raise IncompatibleUnitsException()    
+            raise IncompatibleUnitsException()

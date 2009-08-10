@@ -141,4 +141,4 @@ def test_good_named_add_w_mult():
                                                
     assert(Quantity(1, mile) + Quantity(1, kilometre) ==
            Quantity(1, kilometre) + Quantity(1, mile) ==
-           Quantity(2609.344, unit('m')))        
+           Quantity(2609.344, unit('m')))
