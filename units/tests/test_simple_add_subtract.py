@@ -106,11 +106,30 @@ def test_valid_composed_addition_with_multipliers():
 def test_valid_named_composed_addition_with_multipliers():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should add together."""
-    pass
+    
+    mile = units.named_composed_unit.make('mile', 
+                                          units.composed_unit.make([unit('m')], 
+                                                                   [], 
+                                                                   multiplier=1609.344))
+    kilometre = units.named_composed_unit.make('km',
+                                               units.composed_unit.make([unit('m')], 
+                                                                        [], 
+                                                                        multiplier=1000))
+    
+    assert(Quantity(1, mile) + Quantity(1, kilometre) ==
+           Quantity(1, kilometre) + Quantity(1, mile) ==
+           Quantity(2609.344, unit('m')))    
     
 def test_valid_named_composed_addition_with_multiplier():
     """A quantity with a named composed unit that carries a multiplier 
     should add to a composed unit that has a multiplier"""
-    pass
-    #left 
-    #right
+    
+    mile = units.composed_unit.make([unit('m')], [], multiplier=1609.344)
+    kilometre = units.named_composed_unit.make('km',
+                                               units.composed_unit.make([unit('m')], 
+                                               [], 
+                                               multiplier=1000))
+                                               
+    assert(Quantity(1, mile) + Quantity(1, kilometre) ==
+           Quantity(1, kilometre) + Quantity(1, mile) ==
+           Quantity(2609.344, unit('m')))        

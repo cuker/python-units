@@ -13,8 +13,7 @@ def test_valid_conversion_from_named_to_basic():
     km = units.named_composed_unit.make('km',
                                         units.composed_unit.make([unit('m')],
                                                                  [],
-                                                                 multiplier=1000),
-                                        is_si=False)
+                                                                 multiplier=1000))
     
     one_km_in_m = (Quantity(1, km) in unit('m'))
     
@@ -26,8 +25,7 @@ def test_valid_conversion_from_basic_to_named():
     km = units.named_composed_unit.make('km',
                                         units.composed_unit.make([unit('m')],
                                                                  [],
-                                                                 multiplier=1000),
-                                        is_si=False)
+                                                                 multiplier=1000))
     
     one_thousand_m_in_km = Quantity(1000, unit('m')) in km
     

@@ -64,5 +64,4 @@ def make(unit_str):
     return units.named_composed_unit.make(unit_str,
             units.composed_unit.make([units.unit(without_prefix(unit_str))],
                 [],
-                multiplier(unit_str)),
-            is_si=False)
+                multiplier(unit_str)))

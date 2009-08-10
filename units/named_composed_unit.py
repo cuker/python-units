@@ -3,7 +3,7 @@ from units import REGISTRY as GLOBAL_REGISTRY
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 
-def make(name, composed_unit, is_si):
+def make(name, composed_unit, is_si=False):
     """Give a composed unit a new symbol."""
 
     if name not in GLOBAL_REGISTRY:
