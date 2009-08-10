@@ -1,5 +1,7 @@
 """Assign arbitrary new symbols to composed units."""
 from units import REGISTRY as GLOBAL_REGISTRY
+from units.compatibility import compatible
+from units.exception import IncompatibleUnitsException
 
 def make(name, composed_unit, is_si):
     """Give a composed unit a new symbol."""

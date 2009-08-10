@@ -3,6 +3,8 @@
 
 import py.test
 from units import unit
+import units.composed_unit
+import units.named_composed_unit
 from units.quantity import Quantity
 from units.exception import IncompatibleUnitsException
 
@@ -44,11 +46,11 @@ def test_valid_composed_addition():
     
 def test_valid_named_composed_addition():
     """Two quantities with the same named complex units should add together"""
-    furlong = named_composed_unit.make('furlong', 
-                                       composed_unit.make(['m'], 
-                                                          [], 
-                                                          multiplier=201.168),
-                                       si=False) 
+    furlong = units.named_composed_unit.make('furlong', 
+                                       units.composed_unit.make([unit('m')], 
+                                                                [], 
+                                                                multiplier=201.168),
+                                       is_si=False) 
     assert (Quantity(2, furlong) +
             Quantity(2, furlong) ==
             Quantity(4, furlong))
@@ -57,11 +59,11 @@ def test_valid_named_composed_addition():
 def test_valid_mixed_named_composed_addition():
     """Two quantities with the same units should add together 
     even if one is named"""
-    gray = named_composed_unit.make('gray',
-                                    composed_unit.make(['J', 'kg'],
-                                                       []),
-                                    si=True)
-    sievert = composed_unit.make(['J', 'kg'], [])
+    gray = units.named_composed_unit.make('gray',
+                                          units.composed_unit.make([unit('J'), unit('kg')],
+                                                             []),
+                                          is_si=True)
+    sievert = units.composed_unit.make([unit('J'), unit('kg')], [])
     
     assert(Quantity(2, gray) + 
            Quantity(2, sievert) ==
@@ -77,8 +79,8 @@ def test_valid_composed_addition_with_multiplier():
     """Two quantities with same units should add together when
     they have the same multiplier"""
 
-    moon = composed_unit.make(['day'], [], multiplier=28)
-    lunar_cycle = composed_unit.make(['day'], [], multiplier=28)
+    moon = units.composed_unit.make([unit('day')], [], multiplier=28)
+    lunar_cycle = units.composed_unit.make([unit('day')], [], multiplier=28)
     
     assert(Quantity(1, moon) +
            Quantity(1, lunar_cycle) ==
@@ -94,8 +96,8 @@ def test_valid_composed_addition_with_multipliers():
     """Two quantities with compatible units should add together 
     even when they have different multipliers"""
     
-    mile = composed_unit.make(['m'], [], multiplier=1609.344)
-    kilometre = composed_unit.make(['m'], [], multiplier=1000)   
+    mile = units.composed_unit.make([unit('m')], [], multiplier=1609.344)
+    kilometre = units.composed_unit.make([unit('m')], [], multiplier=1000)   
     
     assert(Quantity(1, mile) + Quantity(1, kilometre) ==
            Quantity(1, kilometre) + Quantity(1, mile) ==
