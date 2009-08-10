@@ -4,6 +4,7 @@ They are not compatible with any other kind of unit."""
 from units import REGISTRY
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
+from units.quantity import Quantity
 import units.composed_unit
 
 

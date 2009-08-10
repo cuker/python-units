@@ -1,17 +1,17 @@
-doctests
-unittest
-epydoc
+* doctests
+* epydoc
+* auto-build:
+  * pylint units
+  * py.test units
+  * some kind of doc generator
+* radians and steradians. They equal 1. What to do?
+* Hz vs. Bq, gray vs. sievert... they are equivalent, but mean different things. What to do?
+* Built-in python time units should box/unbox with time quantities
+* Predefined units:
+  * Areas
+  * imperial units
+  * [unusual units](http://en.wikipedia.org/wiki/List_of_unusual_units_of_measurement)
+* license (same as whatever python is)
+* HACKING.txt
+* README
 
-auto-build:
-    - pylint units
-    - py.test -n 2 units
-    
-
-radians and steradians. They equal 1. What to do?
-
-Hz vs. Bq, gray vs. sievert... they are equivalent, but mean different things. What to do?
-
-Built-in python time units should box/unbox with time quantities
-
-version control
-license

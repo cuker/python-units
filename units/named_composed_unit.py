@@ -2,6 +2,7 @@
 from units import REGISTRY as GLOBAL_REGISTRY
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
+from units.quantity import Quantity
 
 def make(name, composed_unit, is_si=False):
     """Give a composed unit a new symbol."""
@@ -35,12 +36,18 @@ class NamedComposedUnit(object):
         self._si = is_si
 
     def canonical(self):
+        """The canonical version of a named unit is the
+        canonical version of the unit it names."""
         return self.composed_unit.canonical()
         
     def squeeze(self):
+        """A named unit has an implicit quantity equal to 
+        the implicit quantity of the unit it names."""
         return self.composed_unit.squeeze()
         
     def invert(self):
+        """A named unit inverted is the inversion of the unit
+        it names."""
         return self.composed_unit.invert()
         
     def __mul__(self, other):

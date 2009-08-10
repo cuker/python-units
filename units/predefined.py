@@ -10,15 +10,7 @@ def define_units():
     define_base_si_units()
     define_complex_si_units()
     
-    # TODO Areas
-
     name("L", ['cm'] * 3, [], 1000)
-
-    # TODO imperial
-
-    # TODO http://en.wikipedia.org/wiki/List_of_unusual_units_of_measurement
-
-    
 
 def define_base_si_units():
     """Define the basic SI units."""
@@ -37,7 +29,6 @@ def name(symbol, numer, denom, multiplier=1, is_si=True):
 
 def define_complex_si_units():
     """Define SI units that are built on other SI units."""
-    # TODO Radians and steradians are weird units that equal 1.
     for sym in ["rad", "sr"]:  
         units.leaf_unit.make(sym, is_si=True)
 

@@ -18,9 +18,16 @@ def test_commutative_multiply():
 
 def test_simple_multiply_quantity():
     """Simple multiplication of quantities"""
-    assert Quantity(4, unit('m') * unit('s')) == Quantity(2, unit('m')) * Quantity(2, unit('s'))
-    assert Quantity(4, unit('m') * unit('s')) == Quantity(2, unit('s')) * Quantity(2, unit('m'))
+    assert (Quantity(2, unit('m')) * 
+            Quantity(2, unit('s')) ==
+            Quantity(4, unit('m') * unit('s')))
+            
+    assert (Quantity(2, unit('s')) * 
+            Quantity(2, unit('m')) ==
+            Quantity(4, unit('m') * unit('s')))
 
 def test_simple_divide_quantity():
     """Simple division of quantities"""
-    assert Quantity(4, unit('m') / unit('s')) == Quantity(8, unit('m')) / Quantity(2, unit('s'))
+    assert (Quantity(8, unit('m')) / 
+            Quantity(2, unit('s')) ==
+            Quantity(4, unit('m') / unit('s')))

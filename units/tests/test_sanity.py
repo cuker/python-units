@@ -3,7 +3,6 @@ Canary for a completely-broken setup."""
 #!/usr/bin/env python
 
 from units import unit
-import py.test
 
 def test_basic_creation():
     """The unit() method should construct equal unit objects 
