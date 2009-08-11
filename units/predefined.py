@@ -19,7 +19,12 @@ def define_base_si_units(registry):
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
         units.leaf_unit.make(sym, is_si=True, registry=registry)
 
-def name(symbol, numer, denom, multiplier=1, is_si=True, registry=units.REGISTRY):
+def name(symbol, 
+         numer, 
+         denom, 
+         multiplier=1, 
+         is_si=True, 
+         registry=units.REGISTRY):
     """Shortcut to create and return a new named unit."""
     return units.named_composed_unit.make(symbol,
             units.composed_unit.make([unit(x) for x in numer], 

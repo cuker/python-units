@@ -55,7 +55,8 @@ def without_prefix(unit_str):
 
 def can_make(unit_str, registry=units.REGISTRY):
     """True if the given unit string represents an SI unit."""
-    return prefixed(unit_str) and units.unit(without_prefix(unit_str), registry).si
+    return (prefixed(unit_str) and 
+            units.unit(without_prefix(unit_str), registry).si)
         
 
 def make(unit_str, registry=units.REGISTRY):

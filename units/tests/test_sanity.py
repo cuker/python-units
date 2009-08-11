@@ -8,11 +8,11 @@ def test_basic_creation():
     """The unit() method should construct equal unit objects 
     given equal strings."""
     
-    r = {}
-    assert unit('m', registry=r) == unit('m', registry=r)
+    registry = {}
+    assert unit('m', registry=registry) == unit('m', registry=registry)
 
 def test_basic_difference():
     """The unit() method should construct different unit objects
     given different strings."""
-    r = {}
-    assert unit('m', registry=r) != unit('s', registry=r)
+    registry = {}
+    assert unit('m', registry=registry) != unit('s', registry=registry)
