@@ -2,6 +2,7 @@
 * auto-build:
   * pylint units
   * py.test units
+    * code coverage measurement
   * epydoc units
 * radians and steradians. They equal 1. What to do?
 * Hz vs. Bq, gray vs. sievert... they are equivalent, but mean different things. What to do?
@@ -13,4 +14,7 @@
 * license (same as or compatible with whatever python is)
 * HACKING.txt
 * README
-
+* Dependency-injecting the unit registry has lots of boilerplate. Solution?
+* cls.__new__ should replace cls.make() in general, but may not actually want to return a cls. is this possible?
+* Someone is going to use different registries in the same program. Prevent? Treat as namespaces?
+* py.test assertions that the global registry is left unpolluted after each test file

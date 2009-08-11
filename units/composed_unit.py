@@ -2,11 +2,11 @@
 (but not other composed units.) 
 Utility methods here for working with abstract fractions."""
 
-from units import REGISTRY
+import units
 from units.compatibility import compatible
 
 
-def make(numer, denom, multiplier=1):
+def make(numer, denom, multiplier=1, registry=units.REGISTRY):
     """Construct a unit that is a quotient of products of units, 
     including an implicit quantity multiplier."""
     (mult, simple_numer, simple_denom) = cancel(numer, denom)
@@ -35,9 +35,9 @@ def make(numer, denom, multiplier=1):
         pass
             
     key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
-    if key not in REGISTRY:
-        REGISTRY[key] = ComposedUnit(wrung_numer, wrung_denom, multiplier)
-    return REGISTRY[key]
+    if key not in registry:
+        registry[key] = ComposedUnit(wrung_numer, wrung_denom, multiplier)
+    return registry[key]
 
 def cancel(numer, denom):
     """Cancel out compatible units in the given numerator and denominator.

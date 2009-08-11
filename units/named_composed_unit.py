@@ -1,16 +1,16 @@
 """Assign arbitrary new symbols to composed units."""
-from units import REGISTRY as GLOBAL_REGISTRY
+import units
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
 
-def make(name, composed_unit, is_si=False):
+def make(name, composed_unit, is_si=False, registry=units.REGISTRY):
     """Give a composed unit a new symbol."""
 
-    if name not in GLOBAL_REGISTRY:
-        GLOBAL_REGISTRY[name] = NamedComposedUnit(name, composed_unit, is_si)
+    if name not in registry:
+        registry[name] = NamedComposedUnit(name, composed_unit, is_si)
     
-    return GLOBAL_REGISTRY[name]
+    return registry[name]
 
 class NamedComposedUnit(object):
     """A NamedComposedUnit is a composed unit with its own symbol."""

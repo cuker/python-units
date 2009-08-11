@@ -1,20 +1,27 @@
 """Leaf units stand alone. 
 They are not compatible with any other kind of unit."""
 
-from units import REGISTRY
+import units
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
 import units.composed_unit
 
 
-def make(symbol, is_si):
+def make(symbol, is_si, registry=units.REGISTRY):
     """Make a new LeafUnit with the given unit symbol and SI-compatibility.
-    A unit that is SI compatible can be prefixed e.g. with k to mean 1000x."""
-    if symbol not in REGISTRY:
-        REGISTRY[symbol] = LeafUnit(symbol, is_si)
+    A unit that is SI compatible can be prefixed e.g. with k to mean 1000x.
+    
+    >> make('m', is_si=True)
+    units.leaf_unit.make('m', True)
+    >> make('mi', is_si=False)
+    units.leaf_unit.make('mi', False)
+    
+    """
+    if symbol not in registry:
+        registry[symbol] = LeafUnit(symbol, is_si)
 
-    return REGISTRY[symbol]
+    return registry[symbol]
     
 class LeafUnit(object):
     """Leaf units are not compatible with other units, but they can be 

@@ -3,51 +3,54 @@ import units.composed_unit
 import units.leaf_unit
 import units.named_composed_unit
 from units import unit
+import units
 
 
-def define_units():
+def define_units(registry=units.REGISTRY):
     """Define built-in units."""
-    define_base_si_units()
-    define_complex_si_units()
+    define_base_si_units(registry)
+    define_complex_si_units(registry)
     
-    name("L", ['cm'] * 3, [], 1000)
+    name("L", ['cm'] * 3, [], 1000, registry=registry)
 
-def define_base_si_units():
+def define_base_si_units(registry):
     """Define the basic SI units."""
     # meter, gram, second, ampere, kelvin, mole, candela
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
-        units.leaf_unit.make(sym, is_si=True)
+        units.leaf_unit.make(sym, is_si=True, registry=registry)
 
-def name(symbol, numer, denom, multiplier=1, is_si=True):
+def name(symbol, numer, denom, multiplier=1, is_si=True, registry=units.REGISTRY):
     """Shortcut to create and return a new named unit."""
     return units.named_composed_unit.make(symbol,
             units.composed_unit.make([unit(x) for x in numer], 
                                      [unit(x) for x in denom], 
-                                     multiplier), 
-            is_si)
+                                     multiplier,
+                                     registry), 
+            is_si,
+            registry)
     
 
-def define_complex_si_units():
+def define_complex_si_units(registry):
     """Define SI units that are built on other SI units."""
     for sym in ["rad", "sr"]:  
-        units.leaf_unit.make(sym, is_si=True)
+        units.leaf_unit.make(sym, is_si=True, registry=registry)
 
-    name("Hz", [], ["s"]) #hertz
-    name("N", ["m", "kg"], ["s", "s"]) #Newton
-    name("Pa", ["N"], ["m", "m"]) #pascal
-    name("J", ["N", "m"], []) #Joule
-    name("W", ["J"], ["s"]) # Watt
-    name("C", ["s", "A"], []) # Coulomb
-    name("V", ["W"], ["A"]) # Volt
-    name("F", ["C"], ["V"]) # Farad
-    name("Ohm", ["V"], ["A"]) 
-    name("S", ["A"], ["V"])   #Siemens
-    name("Wb", ["V", "s"], []) # Weber
-    name("T", ["Wb"], ["m", "m"]) # Tesla
-    name("H", ["Wb"], ["A"]) # Henry
-    name("lm", ["cd", "sr"], []) # lumen 
-    name("lx", ["lm"], ["m", "m"]) #lux
-    name("Bq", [], ["s"]) # Becquerel
-    name("Gy", ["J"], ["kg"]) # Gray
-    name("Sv", ["J"], ["kg"]) # Sievert
-    name("kat", ["mol"], ["s"]) # Katal
+    name("Hz", [], ["s"], registry=registry) #hertz
+    name("N", ["m", "kg"], ["s", "s"], registry=registry) #Newton
+    name("Pa", ["N"], ["m", "m"], registry=registry) #pascal
+    name("J", ["N", "m"], [], registry=registry) #Joule
+    name("W", ["J"], ["s"], registry=registry) # Watt
+    name("C", ["s", "A"], [], registry=registry) # Coulomb
+    name("V", ["W"], ["A"], registry=registry) # Volt
+    name("F", ["C"], ["V"], registry=registry) # Farad
+    name("Ohm", ["V"], ["A"], registry=registry) 
+    name("S", ["A"], ["V"], registry=registry)   #Siemens
+    name("Wb", ["V", "s"], [], registry=registry) # Weber
+    name("T", ["Wb"], ["m", "m"], registry=registry) # Tesla
+    name("H", ["Wb"], ["A"], registry=registry) # Henry
+    name("lm", ["cd", "sr"], [], registry=registry) # lumen 
+    name("lx", ["lm"], ["m", "m"], registry=registry) #lux
+    name("Bq", [], ["s"], registry=registry) # Becquerel
+    name("Gy", ["J"], ["kg"], registry=registry) # Gray
+    name("Sv", ["J"], ["kg"], registry=registry) # Sievert
+    name("kat", ["mol"], ["s"], registry=registry) # Katal
