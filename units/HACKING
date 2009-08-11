@@ -1,0 +1,39 @@
+<!--
+awk "/^    / { print }" $0 | sh
+exit
+-->
+
+To hack on this module, you should get:
+
+ * Mercurial (hg)
+ * pylint
+ * py.test
+ * epydoc
+ * figleaf
+ * Unix
+
+To run the tests, doctests, and generate a figleaf coverage report:
+
+    py.test -p doctest --doctest-modules -p figleaf -F --figleaf-html figleaf-html units
+
+Note that figleaf crashes on some tests if they fail. 
+
+To generate the html documentation, run:
+
+    epydoc units
+
+To check the style of the code, run:
+
+    pylint units
+
+To make this file's HTML version (if you have markdown installed):
+
+    markdown units/HACKING -f units/HACKING.html
+
+To do it all:
+
+<!-- 
+    exit
+-->
+
+    units/HACKING

@@ -2,3 +2,4 @@ pypy
 build
 html
 \.pyc$
+\.figleaf
