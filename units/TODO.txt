@@ -10,3 +10,4 @@
 * Someone is going to use different registries in the same program. Prevent? Treat as namespaces?
 * py.test assertions that the global registry is left unpolluted after each test file
 * Testing inequalities.
+* How to interpret Figleaf output?
