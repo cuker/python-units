@@ -118,9 +118,16 @@ def test_good_add_w_mults():
     mile = units.composed_unit.make([unit('m', registry=r)], [], multiplier=1609.344, registry=r)
     kilometre = units.composed_unit.make([unit('m', registry=r)], [], multiplier=1000, registry=r)   
     
-    assert(Quantity(1, mile) + Quantity(1, kilometre) ==
-           Quantity(1, kilometre) + Quantity(1, mile) ==
-           Quantity(2609.344, unit('m', registry=r)))
+    m_on_left = Quantity(1, mile) + Quantity(1, kilometre)
+    km_on_left = Quantity(1, kilometre) + Quantity(1, mile)
+    manual_sum = Quantity(2609.344, unit('m', registry=r))
+            
+    assert m_on_left == km_on_left
+    assert km_on_left == m_on_left
+    assert manual_sum == m_on_left
+    assert manual_sum == km_on_left
+    assert m_on_left == manual_sum
+    assert km_on_left == manual_sum
     
 def test_good_named_add_w_mults():
     """Two quantities with compatible but differently-named and 

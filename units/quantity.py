@@ -68,7 +68,9 @@ class Quantity(object):
         return Quantity(other / self.num, self.unit.invert())
             
     def __eq__(self, other):
-        return self.num == other.num and self.unit == other.unit
+        return ((self.num * self.unit.squeeze() == 
+                other.num * other.unit.squeeze()) and 
+                (compatible(self.unit, other.unit)))
     
     def __gt__(self, other):
         self._ensure_same_type(other)

@@ -5,6 +5,20 @@ Utility methods here for working with abstract fractions."""
 import units
 from units.compatibility import compatible
 
+def collapse(numer, denom, multiplier):
+    """Attempts to convert the fractional unit represented by the parameters
+    into another, simpler type. Returns the simpler unit or None if no 
+    simplification is possible.
+    """
+    
+    if not denom and not numer:
+        return multiplier
+
+    if not denom and len(numer) == 1 and multiplier == 1:
+        return numer[0]
+        
+    return None
+    
 
 def make(numer, denom, multiplier=1, registry=units.REGISTRY):
     """Construct a unit that is a quotient of products of units, 
@@ -21,18 +35,9 @@ def make(numer, denom, multiplier=1, registry=units.REGISTRY):
     wrung_numer.sort()
     wrung_denom.sort()
             
-    if not wrung_denom:
-        if len(wrung_numer) == 1:
-            if multiplier == 1:
-                return wrung_numer[0]
-            else:
-                pass
-        elif not wrung_numer:
-            return multiplier
-        else:
-            pass
-    else:
-        pass
+    simpler = collapse(wrung_numer, wrung_denom, multiplier)
+    if simpler:
+        return simpler
             
     key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
     if key not in registry:
@@ -88,7 +93,10 @@ class ComposedUnit(object):
             
     def canonical(self):
         """Return an immutable, comparable version of this unit."""
-        return (tuple(self.numer), tuple(self.denom))
+        if self.denom or len(self.numer) != 1:
+            return (tuple(self.numer), tuple(self.denom))
+        else:
+            return self.numer[0]
         
     def squeeze(self):
         """Return this unit's implicit quantity multiplier."""
