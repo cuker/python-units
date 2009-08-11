@@ -1,0 +1,20 @@
+For a description of this module or its purpose, please see __init__.py.
+
+For instructions on how to modify this module, please see HACKING.
+
+For a to-do list from the authors of the module, please see TODO.txt.
+
+To send feedback, look for contact information as __contact__ in
+__init__.py. If this module helps you, please send a compliment, since
+the authors might be having a bad day, and you might cheer them up.
+
+This code is licensed under a modified version of the Python Software
+Foundation License. Please see LICENSE.
+
+The true PSF license explicitly refers to the PSF as the owners of the
+software and to Python as the software. The modifications replace
+references to the Python Software Foundations with references to the
+authors, and replace references to Python with references to this module.
+
+The intent is for this code to be released under the same license as
+Python itself. 
