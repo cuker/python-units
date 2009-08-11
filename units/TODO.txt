@@ -11,7 +11,6 @@
   * Areas
   * imperial units
   * [unusual units](http://en.wikipedia.org/wiki/List_of_unusual_units_of_measurement)
-* license (same as or compatible with whatever python is)
 * HACKING.txt
 * README
 * Dependency-injecting the unit registry has lots of boilerplate. Solution?
