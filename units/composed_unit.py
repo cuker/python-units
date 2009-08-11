@@ -78,21 +78,13 @@ class ComposedUnit(object):
     
     si = property(lambda self: False)
              
-    def __repr__(self):
-        # Not a call to 'make' because we've thrown away the creating units.
-        # Because it circumvents the factory, the below repr shouldn't actually 
-        # be used, so we surround it with <> to make sure that's clear
-        return ("<ComposedUnit(" + 
-                ', '.join([repr(x) for x in [self.numer, 
-                                             self.denom,
-                                             self.multiplier]]) + ")>")
-        
     def __str__(self):
         if self.denom:
             return (('*'.join([str(x) for x in self.numer]) or '1') + " / "
                     + '*'.join([str(x) for x in self.denom]))
         else:
             return '*'.join([str(x) for x in self.numer])
+    __repr__ = __str__
             
     def canonical(self):
         """Return an immutable, comparable version of this unit."""

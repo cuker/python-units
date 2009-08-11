@@ -87,10 +87,6 @@ class Quantity(object):
     def __pos__(self):
         return self.num > 0
         
-    def __repr__(self):
-        return ("Quantity(" + 
-                ', '.join([repr(x) for x in [self.num, self.unit]]) + ")")
-    
     def __str__(self):
         return str(self.num * self.unit.squeeze()) + ' ' + str(self.unit)
-    
+    __repr__ = __str__

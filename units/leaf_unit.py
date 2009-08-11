@@ -40,14 +40,10 @@ class LeafUnit(object):
     def __init__(self, unit_str, is_si):
         self._unit_str = unit_str.strip()
         self._si = is_si
-        
-    def __repr__(self):
-        return ("units.leaf_unit.make(" + 
-                ', '.join([repr(x) for x in [self.unit_str, self.si]]) + ")")
-        
-    def __str__(self):
-        return self.unit_str
-
+              
+    __str__ = get_unit_str
+    __repr__ = __str__
+    
     def __mul__(self, other):
         if hasattr(other, "numer"):
             return other * self
