@@ -48,6 +48,22 @@ def wring(lst):
         result.append(unit.canonical())
         
     return (multiplier, result)
+    
+def squeeze(numer, denom, multiplier):
+    """Squeeze for composed unit initialization"""
+    (mult, simple_numer, simple_denom) = cancel(numer, denom)
+
+    multiplier *= mult
+    
+    wrung_mult, wrung_numer = wring(simple_numer)
+    wrung_div, wrung_denom = wring(simple_denom)
+    
+    multiplier *= wrung_mult / wrung_div
+    
+    wrung_numer.sort()
+    wrung_denom.sort()
+    
+    return (wrung_numer, wrung_denom, multiplier)
 
 class ComposedUnit(object):
     """A ComposedUnit is a quotient of products of units."""
@@ -55,17 +71,10 @@ class ComposedUnit(object):
     def __new__(cls, numer, denom, multiplier=1, registry=units.Unit.Registry):
         """Construct a unit that is a quotient of products of units, 
         including an implicit quantity multiplier."""
-        (mult, simple_numer, simple_denom) = cancel(numer, denom)
-
-        multiplier *= mult
-
-        wrung_mult, wrung_numer = wring(simple_numer)
-        wrung_div, wrung_denom = wring(simple_denom)
-
-        multiplier *= wrung_mult / wrung_div
-
-        wrung_numer.sort()
-        wrung_denom.sort()
+       
+        (wrung_numer, wrung_denom, wrung_multiplier) = squeeze(numer, 
+                                                               denom, 
+                                                               multiplier)
 
         simpler = collapse(wrung_numer, wrung_denom, multiplier)
         if simpler:
@@ -73,16 +82,13 @@ class ComposedUnit(object):
 
         key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
         if key not in registry:
-            registry[key] = super(ComposedUnit, cls).__new__(cls, 
-                                                             wrung_numer, 
-                                                             wrung_denom, 
-                                                             multiplier)
+            registry[key] = super(ComposedUnit, cls).__new__(cls)
         return registry[key]
     
     def __init__(self, numer, denom, multiplier=1, registry=None):
-        self.numer = numer
-        self.denom = denom
-        self.multiplier = multiplier        
+        (self.numer, self.denom, self.multiplier) = squeeze(numer, 
+                                                            denom, 
+                                                            multiplier)        
     
     si = property(lambda self: False)
              

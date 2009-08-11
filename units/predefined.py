@@ -15,9 +15,12 @@ def define_units(registry=units.Unit.Registry):
     True
     >>> Unit('m', registry).si
     True
+    >>> Unit('h', registry).si
+    False
     """
     define_base_si_units(registry)
     define_complex_si_units(registry)
+    define_time_units(registry)
     
     name("L", ['cm'] * 3, [], 1000, registry=registry)
 
@@ -32,22 +35,6 @@ def define_base_si_units(registry):
     # meter, gram, second, ampere, kelvin, mole, candela
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
         LeafUnit(sym, is_si=True, registry=registry)
-
-def name(symbol, 
-         numer, 
-         denom, 
-         multiplier=1, 
-         is_si=True, 
-         registry=units.Unit.Registry):
-    """Shortcut to create and return a new named unit."""
-    return NamedComposedUnit(symbol,
-            ComposedUnit([Unit(x) for x in numer], 
-                                     [Unit(x) for x in denom], 
-                                     multiplier,
-                                     registry), 
-            is_si,
-            registry)
-    
 
 def define_complex_si_units(registry):
     """Define SI units that are built on other SI units.
@@ -79,3 +66,56 @@ def define_complex_si_units(registry):
     name("Gy", ["J"], ["kg"], registry=registry) # Gray
     name("Sv", ["J"], ["kg"], registry=registry) # Sievert
     name("kat", ["mol"], ["s"], registry=registry) # Katal
+    
+def define_time_units(registry):
+    """Define some common time units.
+    
+    >>> registry = {}
+    >>> define_time_units(registry)
+    >>> hour = Unit('h', registry)
+    >>> hour.si
+    False
+    
+    >>> from units.quantity import Quantity
+    >>> half_hour = Quantity(0.5, hour)
+    >>> few_secs = Quantity(60, Unit('s', registry))
+    >>> sum = half_hour + few_secs
+    
+    >> mins = Unit('min', registry)
+    >> thirty_one = Quantity(31, mins)
+    >> thirty_one == sum
+    True
+    """
+    if not 's' in registry:
+        define_base_si_units(registry)
+    
+    linear('min', 's', 60, registry)
+    linear('h', 'min', 60, registry)
+    linear('day', 'h', 24, registry)
+    
+def name(symbol, 
+         numer, 
+         denom, 
+         multiplier=1, 
+         is_si=True, 
+         registry=units.Unit.Registry):
+    """Shortcut to create and return a new named unit."""
+    return NamedComposedUnit(symbol,
+            ComposedUnit([Unit(x) for x in numer], 
+                                     [Unit(x) for x in denom], 
+                                     multiplier,
+                                     registry), 
+            is_si,
+            registry)
+
+def linear(new_symbol, base_symbol, multiplier, registry):
+    """Shortcut to create and return a new unit that is 
+    a linear multiplication of another."""
+    return NamedComposedUnit(new_symbol,
+            ComposedUnit([Unit(base_symbol, registry)],
+                         [],
+                         multiplier,
+                         registry),
+            is_si=False,
+            registry=registry)
+        
