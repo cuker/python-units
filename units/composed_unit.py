@@ -19,30 +19,6 @@ def collapse(numer, denom, multiplier):
         
     return None
 
-def make(numer, denom, multiplier=1, registry=units.REGISTRY):
-    """Construct a unit that is a quotient of products of units, 
-    including an implicit quantity multiplier."""
-    (mult, simple_numer, simple_denom) = cancel(numer, denom)
-    
-    multiplier *= mult
-    
-    wrung_mult, wrung_numer = wring(simple_numer)
-    wrung_div, wrung_denom = wring(simple_denom)
-    
-    multiplier *= wrung_mult / wrung_div
-    
-    wrung_numer.sort()
-    wrung_denom.sort()
-            
-    simpler = collapse(wrung_numer, wrung_denom, multiplier)
-    if simpler:
-        return simpler
-            
-    key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
-    if key not in registry:
-        registry[key] = ComposedUnit(wrung_numer, wrung_denom, multiplier)
-    return registry[key]
-
 def cancel(numer, denom):
     """Cancel out compatible units in the given numerator and denominator.
     Return a triple of the implied quantity multiplier that has been 
@@ -75,7 +51,35 @@ def wring(lst):
 
 class ComposedUnit(object):
     """A ComposedUnit is a quotient of products of units."""
-    def __init__(self, numer, denom, multiplier):
+    
+    def __new__(cls, numer, denom, multiplier=1, registry=units.Unit.Registry):
+        """Construct a unit that is a quotient of products of units, 
+        including an implicit quantity multiplier."""
+        (mult, simple_numer, simple_denom) = cancel(numer, denom)
+
+        multiplier *= mult
+
+        wrung_mult, wrung_numer = wring(simple_numer)
+        wrung_div, wrung_denom = wring(simple_denom)
+
+        multiplier *= wrung_mult / wrung_div
+
+        wrung_numer.sort()
+        wrung_denom.sort()
+
+        simpler = collapse(wrung_numer, wrung_denom, multiplier)
+        if simpler:
+            return simpler
+
+        key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
+        if key not in registry:
+            registry[key] = super(ComposedUnit, cls).__new__(cls, 
+                                                             wrung_numer, 
+                                                             wrung_denom, 
+                                                             multiplier)
+        return registry[key]
+    
+    def __init__(self, numer, denom, multiplier=1, registry=None):
         self.numer = numer
         self.denom = denom
         self.multiplier = multiplier        
@@ -104,23 +108,23 @@ class ComposedUnit(object):
     def __mul__(self, other):
         if hasattr(other, "numer"):
             assert(hasattr(other, "denom"))
-            return make(self.numer + other.numer, 
-                        self.denom + other.denom, 
-                        self.squeeze() * other.squeeze())
+            return ComposedUnit(self.numer + other.numer, 
+                                self.denom + other.denom, 
+                                self.squeeze() * other.squeeze())
         else:
-            return make(self.numer + [other], 
-                        self.denom, 
-                        self.squeeze() * other.squeeze())
+            return ComposedUnit(self.numer + [other], 
+                                self.denom, 
+                                self.squeeze() * other.squeeze())
             
     def invert(self):
         """Return (this unit)^-1."""
-        return make(self.denom, self.numer, 1 / self.squeeze())
+        return ComposedUnit(self.denom, self.numer, 1 / self.squeeze())
         
     def __div__(self, other):
         if hasattr(other, "invert"):
             return self * other.invert()
         else:
-            return make(self.numer, 
-                        self.denom + [other], 
-                        self.squeeze() / other.squeeze())
+            return ComposedUnit(self.numer, 
+                                self.denom + [other], 
+                                self.squeeze() / other.squeeze())
             

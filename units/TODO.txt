@@ -1,4 +1,3 @@
-* doctests
 * radians and steradians. They equal 1. What to do?
 * Hz vs. Bq, gray vs. sievert... they are equivalent, but mean different things. What to do?
 * Built-in python time units should box/unbox with time quantities

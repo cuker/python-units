@@ -4,7 +4,7 @@ from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
 
-def make(name, composed_unit, is_si=False, registry=units.REGISTRY):
+def make(name, composed_unit, is_si=False, registry=units.Unit.Registry):
     """Give a composed unit a new symbol."""
 
     if name not in registry:
@@ -30,7 +30,23 @@ class NamedComposedUnit(object):
         return self._si
     si = property(get_si)
 
-    def __init__(self, name, composed_unit, is_si):
+    def __new__(cls, 
+                name, 
+                composed_unit, 
+                is_si=False, 
+                registry=units.Unit.Registry):
+        """Give a composed unit a new symbol."""
+
+        if name not in registry:
+            registry[name] = super(NamedComposedUnit, 
+                                   cls).__new__(cls, 
+                                                name, 
+                                                composed_unit, 
+                                                is_si)
+
+        return registry[name]
+        
+    def __init__(self, name, composed_unit, is_si=False, registry=None):
         self._name = name
         self._composed_unit = composed_unit
         self._si = is_si

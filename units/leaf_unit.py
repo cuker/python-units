@@ -5,23 +5,7 @@ import units
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
-import units.composed_unit
-
-
-def make(symbol, is_si, registry=units.REGISTRY):
-    """Make a new LeafUnit with the given unit symbol and SI-compatibility.
-    A unit that is SI compatible can be prefixed e.g. with k to mean 1000x.
-    
-    >> make('m', is_si=True)
-    units.leaf_unit.make('m', True)
-    >> make('mi', is_si=False)
-    units.leaf_unit.make('mi', False)
-    
-    """
-    if symbol not in registry:
-        registry[symbol] = LeafUnit(symbol, is_si)
-
-    return registry[symbol]
+from units.composed_unit import ComposedUnit
     
 class LeafUnit(object):
     """Leaf units are not compatible with other units, but they can be 
@@ -37,7 +21,22 @@ class LeafUnit(object):
         return self._unit_str
     unit_str = property(get_unit_str)
         
-    def __init__(self, unit_str, is_si):
+    def __new__(cls, symbol, is_si, registry=units.Unit.Registry):
+        """Make a new LeafUnit with the given unit symbol and SI-compatibility.
+        A unit that is SI compatible can be prefixed e.g. with k to mean 1000x.
+
+        >> make('m', is_si=True)
+        LeafUnit(('m', True)
+        >> make('mi', is_si=False)
+        LeafUnit(('mi', False)
+
+        """
+        if symbol not in registry:
+            registry[symbol] = super(LeafUnit, cls).__new__(cls, symbol, is_si)
+
+        return registry[symbol]
+        
+    def __init__(self, unit_str, is_si, registry=None):
         self._unit_str = unit_str.strip()
         self._si = is_si
               
@@ -49,17 +48,17 @@ class LeafUnit(object):
             return other * self
         
         else:
-            return units.composed_unit.make([self, other], [])
+            return ComposedUnit([self, other], [])
     
     def __div__(self, other):
         if hasattr(other, "invert"):
             return other.invert() * self
         else:
-            return units.composed_unit.make([self], [other])
+            return ComposedUnit([self], [other])
     
     def invert(self):
         """Return (this unit)^-1"""
-        return units.composed_unit.make([], [self])
+        return ComposedUnit([], [self])
     
     def canonical(self):
         """A LeafUnit is its own canonical form."""

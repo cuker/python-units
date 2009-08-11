@@ -13,26 +13,31 @@ __copyright__ = '2009'
 __license__   = 'Python Software Foundation License'
 __contact__   = 'aran@arandonohue.com'
 
-REGISTRY = {}
+class Unit(object):
+    """Factory for units."""
+    
+    Registry = {}
+    
+    def __new__(cls, unit_str, registry=Registry):
+        """Create a unit object from a given string specification.
+
+        >>> registry = {}
+        >>> Unit('m', registry=registry) == Unit('m', registry=registry)
+        True
+        >>> Unit('m', registry=registry) != Unit('s', registry=registry)
+        True
+        """
+        if unit_str in registry:
+            return registry[unit_str]
+        if units.si.can_make(unit_str, registry):
+            return units.si.make(unit_str, registry)
+        else:
+            result = LeafUnit.__new__(LeafUnit, unit_str, False, registry)
+            result.__init__(unit_str, False)
+            return result
+
 
 import units.si
+from  units.leaf_unit import LeafUnit
 
-import units.leaf_unit
-import units.named_composed_unit
-
-
-def unit(unit_str, registry=REGISTRY):
-    """Create a unit object from a given string specification.
     
-    >>> registry = {}
-    >>> unit('m', registry=registry) == unit('m', registry=registry)
-    True
-    >>> unit('m', registry=registry) != unit('s', registry=registry)
-    True
-    """
-    if unit_str in registry:
-        return registry[unit_str]
-    if units.si.can_make(unit_str, registry):
-        return units.si.make(unit_str, registry)
-    else:
-        return units.leaf_unit.make(unit_str, is_si=False, registry=registry)

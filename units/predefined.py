@@ -1,19 +1,19 @@
 """Predefined units."""
-import units.composed_unit
-import units.leaf_unit
-import units.named_composed_unit
-from units import unit
+from units.composed_unit import ComposedUnit
+from units.leaf_unit import LeafUnit
+from units.named_composed_unit import NamedComposedUnit
+from units import Unit
 import units
 
 
-def define_units(registry=units.REGISTRY):
+def define_units(registry=units.Unit.Registry):
     """Define built-in units.
 
     >>> registry = {}
     >>> define_units(registry)
-    >>> unit('Hz', registry).si
+    >>> Unit('Hz', registry).si
     True
-    >>> unit('m', registry).si
+    >>> Unit('m', registry).si
     True
     """
     define_base_si_units(registry)
@@ -26,23 +26,23 @@ def define_base_si_units(registry):
     
     >>> registry = {}
     >>> define_base_si_units(registry=registry)
-    >>> unit('m', registry).si
+    >>> Unit('m', registry).si
     True
     """
     # meter, gram, second, ampere, kelvin, mole, candela
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
-        units.leaf_unit.make(sym, is_si=True, registry=registry)
+        LeafUnit(sym, is_si=True, registry=registry)
 
 def name(symbol, 
          numer, 
          denom, 
          multiplier=1, 
          is_si=True, 
-         registry=units.REGISTRY):
+         registry=units.Unit.Registry):
     """Shortcut to create and return a new named unit."""
-    return units.named_composed_unit.make(symbol,
-            units.composed_unit.make([unit(x) for x in numer], 
-                                     [unit(x) for x in denom], 
+    return NamedComposedUnit(symbol,
+            ComposedUnit([Unit(x) for x in numer], 
+                                     [Unit(x) for x in denom], 
                                      multiplier,
                                      registry), 
             is_si,
@@ -54,11 +54,11 @@ def define_complex_si_units(registry):
     
     >>> registry = {}
     >>> define_complex_si_units(registry)
-    >>> unit('Hz', registry).si
+    >>> Unit('Hz', registry).si
     True
     """
     for sym in ["rad", "sr"]:  
-        units.leaf_unit.make(sym, is_si=True, registry=registry)
+        LeafUnit(sym, is_si=True, registry=registry)
 
     name("Hz", [], ["s"], registry=registry) #hertz
     name("N", ["m", "kg"], ["s", "s"], registry=registry) #Newton

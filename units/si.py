@@ -2,8 +2,8 @@
 encodes logic to handle these PREFIXES and create SI units."""
 
 import units
-import units.composed_unit
-import units.named_composed_unit
+from units.composed_unit import ComposedUnit
+from units.named_composed_unit import NamedComposedUnit
 
 PREFIXES = {
     'Y' : 10 ** 24,
@@ -53,17 +53,17 @@ def without_prefix(unit_str):
         return unit_str[1:]
 
 
-def can_make(unit_str, registry=units.REGISTRY):
+def can_make(unit_str, registry=units.Unit.Registry):
     """True if the given unit string represents an SI unit."""
     return (prefixed(unit_str) and 
-            units.unit(without_prefix(unit_str), registry).si)
+            units.Unit(without_prefix(unit_str), registry).si)
         
 
-def make(unit_str, registry=units.REGISTRY):
+def make(unit_str, registry=units.Unit.Registry):
     """Create a unit object from the given SI-unit string."""
     assert can_make(unit_str)
-    return units.named_composed_unit.make(unit_str,
-            units.composed_unit.make([units.unit(without_prefix(unit_str))],
+    return NamedComposedUnit(unit_str,
+            ComposedUnit([units.Unit(without_prefix(unit_str))],
                 [],
                 multiplier(unit_str),
                 registry),
