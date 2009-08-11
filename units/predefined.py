@@ -7,14 +7,28 @@ import units
 
 
 def define_units(registry=units.REGISTRY):
-    """Define built-in units."""
+    """Define built-in units.
+
+    >>> registry = {}
+    >>> define_units(registry)
+    >>> unit('Hz', registry).si
+    True
+    >>> unit('m', registry).si
+    True
+    """
     define_base_si_units(registry)
     define_complex_si_units(registry)
     
     name("L", ['cm'] * 3, [], 1000, registry=registry)
 
 def define_base_si_units(registry):
-    """Define the basic SI units."""
+    """Define the basic SI units.
+    
+    >>> registry = {}
+    >>> define_base_si_units(registry=registry)
+    >>> unit('m', registry).si
+    True
+    """
     # meter, gram, second, ampere, kelvin, mole, candela
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
         units.leaf_unit.make(sym, is_si=True, registry=registry)
@@ -36,7 +50,13 @@ def name(symbol,
     
 
 def define_complex_si_units(registry):
-    """Define SI units that are built on other SI units."""
+    """Define SI units that are built on other SI units.
+    
+    >>> registry = {}
+    >>> define_complex_si_units(registry)
+    >>> unit('Hz', registry).si
+    True
+    """
     for sym in ["rad", "sr"]:  
         units.leaf_unit.make(sym, is_si=True, registry=registry)
 
