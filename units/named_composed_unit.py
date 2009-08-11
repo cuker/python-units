@@ -58,7 +58,7 @@ class NamedComposedUnit(object):
     __str__ = get_name
     __repr__ = __str__
         
-    def __contains__(self, quantity):
+    def __call__(self, quantity):
         """Overload the 'in' operator to convert units."""
         if compatible(self, quantity.unit):
             return Quantity(quantity.num * quantity.unit.squeeze(), self)

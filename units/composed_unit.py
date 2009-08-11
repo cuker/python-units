@@ -18,7 +18,6 @@ def collapse(numer, denom, multiplier):
         return numer[0]
         
     return None
-    
 
 def make(numer, denom, multiplier=1, registry=units.REGISTRY):
     """Construct a unit that is a quotient of products of units, 

@@ -67,8 +67,8 @@ class LeafUnit(object):
         
     squeeze = lambda self: 1
     
-    def __contains__(self, quantity):
-        """Overload the 'in' operator to convert units."""
+    def __call__(self, quantity):
+        """Overload the function call operator to convert units."""
         if compatible(self, quantity.unit):
             return Quantity(quantity.num * quantity.unit.squeeze(), self)
         else:
