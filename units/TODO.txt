@@ -7,6 +7,6 @@
   * imperial units
   * [unusual units](http://en.wikipedia.org/wiki/List_of_unusual_units_of_measurement)
 * Dependency-injecting the unit registry has lots of boilerplate. Solution?
-* cls.__new__ should replace cls.make() in general, but may not actually want to return a cls. is this possible?
 * Someone is going to use different registries in the same program. Prevent? Treat as namespaces?
 * py.test assertions that the global registry is left unpolluted after each test file
+* Testing inequalities.
