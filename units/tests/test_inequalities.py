@@ -13,9 +13,11 @@ each of these * valid and invalid comparisons
 
 ...
 """
-
-import py.test
-
+try:
+    import py.test
+except ImportError:
+    pass
+    
 from units import Unit
 from units.composed_unit import ComposedUnit
 from units.named_composed_unit import NamedComposedUnit

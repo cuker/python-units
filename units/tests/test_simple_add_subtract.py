@@ -1,6 +1,10 @@
 """Tests for addition and subtraction of Quantities"""
 
-import py.test
+# Work around figleaf bug.
+try:
+    import py.test
+except ImportError:
+    pass
 from units import Unit
 from units.composed_unit import ComposedUnit
 from units.named_composed_unit import NamedComposedUnit

@@ -14,7 +14,6 @@ def test_simple_divide():
 
 def test_commutative_multiply():
     """Commutative multiplication of units"""
-    
     assert Unit('m') * Unit('s') / Unit('m') == Unit('s')
 
 def test_simple_multiply_quantity():
