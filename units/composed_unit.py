@@ -50,7 +50,11 @@ def wring(lst):
     return (multiplier, result)
     
 def squeeze(numer, denom, multiplier):
-    """Squeeze for composed unit initialization"""
+    """Return this unit's implicit quantity multiplier.
+    
+    Some units imply quantities. For example, a kilometre implies a quantity
+    of a thousand metres. This 'squeezes' out these implied quantities, 
+    returning a modified multiplier and simpler units."""
     (mult, simple_numer, simple_denom) = cancel(numer, denom)
 
     multiplier *= mult
