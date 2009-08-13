@@ -3,8 +3,6 @@
 * Built-in python time units should box/unbox with time quantities
   * In general, python objects that refer to quantities should play nicely with this module...
 * Predefined units:
-  * Areas
-  * imperial units
   * [unusual units](http://en.wikipedia.org/wiki/List_of_unusual_units_of_measurement)
 
 * the __round__ protocol seems to be py3k only...
