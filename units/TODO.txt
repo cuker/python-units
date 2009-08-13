@@ -9,5 +9,7 @@
 * Dependency-injecting the unit registry has lots of boilerplate. Solution?
 * Someone is going to use different registries in the same program. Prevent? Treat as namespaces?
 * py.test assertions that the global registry is left unpolluted after each test file
-* Testing inequalities.
+  * In general, test the registry system.
 * How to interpret Figleaf output?
+* Instead of hasattr'ing parameters and using asserts to determine whether we can convert units or not, we could instead just do the conversion we want to do, raising a NotImplemented upon failure.
+

@@ -68,23 +68,25 @@ class Quantity(object):
         return Quantity(other / self.num, self.unit.invert())
             
     def __eq__(self, other):
-        return ((self.num * self.unit.squeeze() == 
-                other.num * other.unit.squeeze()) and 
-                (compatible(self.unit, other.unit)))
-    
-    def __gt__(self, other):
+        if compatible(self.unit, other.unit):
+            return True
+        else:
+            return cmp(self, other) == 0
+        
+    def __ne__(self, other):
+        return not self == other
+        
+    def __cmp__(self, other):
         self._ensure_same_type(other)
-        return (self.num * self.unit.squeeze() >=
+        return cmp(self.num * self.unit.squeeze(),
                 other.num * other.unit.squeeze())
-    
-    
+                
     def __neg__(self):
         return Quantity(-self.num, self.unit)
     
     def __nonzero__(self):
         return bool(self.num)
     __bool__ = __nonzero__ # for py3k
-    
     
     def __pos__(self):
         return self.num > 0
