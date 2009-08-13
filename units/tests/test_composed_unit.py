@@ -1,3 +1,5 @@
+"""Tests specific to composed units and their complexities."""
+
 from units import Unit
 from units.composed_unit import ComposedUnit
 def test_collapse_to_num():

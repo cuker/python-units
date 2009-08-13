@@ -8,8 +8,11 @@ except ImportError:
 from units import Unit
 from units.composed_unit import ComposedUnit
 from units.named_composed_unit import NamedComposedUnit
+from units.predefined import define_units
 from units.quantity import Quantity
 from units.exception import IncompatibleUnitsException
+
+define_units()
 
 def test_good_simple_add():
     """Two quantities with the same unit should add together."""
@@ -146,16 +149,8 @@ def test_good_named_add_w_mults():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should add together."""
     
-    mile = NamedComposedUnit(
-            'mile', 
-            ComposedUnit([Unit('m')], 
-                         [], 
-                         multiplier=1609.344))
-    kilometre = NamedComposedUnit(
-                    'km',
-                    ComposedUnit([Unit('m')], 
-                                 [], 
-                                 multiplier=1000))
+    mile = Unit('mi')
+    kilometre = Unit('km')
     
     assert(Quantity(1, mile) + Quantity(1, kilometre) ==
            Quantity(1, kilometre) + Quantity(1, mile) ==
@@ -165,14 +160,8 @@ def test_good_named_add_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
     should add to a composed unit that has a multiplier"""
     
-    mile = ComposedUnit([Unit('m')], 
-                        [], 
-                        multiplier=1609.344)
-    kilometre = NamedComposedUnit(
-                    'km',
-                    ComposedUnit([Unit('m')], 
-                                 [], 
-                                 multiplier=1000))
+    mile = Unit('mi').composed_unit
+    kilometre = Unit('km')
                                                
     assert(Quantity(1, mile) + Quantity(1, kilometre) ==
            Quantity(1, kilometre) + Quantity(1, mile) ==
@@ -191,12 +180,7 @@ def test_good_composed_sub():
 def test_good_named_sub():
     """Two quantities with the same named complex units should sub together"""
     
-    furlong = NamedComposedUnit(
-                'furlong', 
-                ComposedUnit([Unit('m')], 
-                             [], 
-                             multiplier=201.168),
-                is_si=False) 
+    furlong = Unit('fur')
                 
     assert (Quantity(4, furlong) -
             Quantity(2, furlong) ==
@@ -207,16 +191,9 @@ def test_good_mixed_sub():
     """Two quantities with the same units should sub together 
     even if one is named"""
     
-    gray = NamedComposedUnit(
-            'gray',
-            ComposedUnit([Unit('J'), 
-                          Unit('kg')],
-                          []),
-            is_si=True)
+    gray = Unit('Gy')
             
-    sievert = ComposedUnit([Unit('J'), 
-                            Unit('kg')], 
-                           [])
+    sievert = Unit('Sv').composed_unit
     
     assert(Quantity(4, gray) - 
            Quantity(2, sievert) ==
@@ -254,13 +231,8 @@ def test_good_sub_w_mults():
     """Two quantities with compatible units should sub together 
     even when they have different multipliers"""
     
-    
-    mile = ComposedUnit([Unit('m')], 
-                        [], 
-                        multiplier=1609.344)
-    kilometre = ComposedUnit([Unit('m')], 
-                             [], 
-                             multiplier=1000)   
+    mile = Unit('mi').composed_unit
+    kilometre = Unit('km').composed_unit   
     
     m_on_left = Quantity(1, mile) - Quantity(1, kilometre)
     km_on_left = Quantity(1, kilometre) - Quantity(1, mile)
@@ -275,16 +247,8 @@ def test_good_named_sub_w_mults():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should sub together."""
     
-    mile = NamedComposedUnit(
-            'mile', 
-            ComposedUnit([Unit('m')], 
-                         [], 
-                         multiplier=1609.344))
-    kilometre = NamedComposedUnit(
-                    'km',
-                    ComposedUnit([Unit('m')], 
-                                 [], 
-                                 multiplier=1000))
+    mile = Unit('mi')
+    kilometre = Unit('km')
     
     assert(Quantity(1, mile) - Quantity(1, kilometre) ==
            Quantity(609.344, Unit('m')))
@@ -296,14 +260,8 @@ def test_good_named_sub_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
     should sub to a composed unit that has a multiplier"""
     
-    mile = ComposedUnit([Unit('m')], 
-                        [], 
-                        multiplier=1609.344)
-    kilometre = NamedComposedUnit(
-                    'km',
-                    ComposedUnit([Unit('m')], 
-                                 [], 
-                                 multiplier=1000))
+    mile = Unit('mi').composed_unit
+    kilometre = Unit('km')
                                                
     assert(Quantity(1, mile) - Quantity(1, kilometre) ==
            Quantity(609.344, Unit('m')))
