@@ -75,8 +75,8 @@ class Quantity(object):
         return Quantity(other / self.num, self.unit.invert())
             
     def __eq__(self, other):
-        if compatible(self.unit, other.unit):
-            return True
+        if not compatible(self.unit, other.unit):
+            return False
         else:
             return cmp(self, other) == 0
         

@@ -1,5 +1,4 @@
 """Assign arbitrary new symbols to composed units."""
-import units
 from units import Unit
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException

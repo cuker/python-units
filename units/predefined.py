@@ -3,8 +3,6 @@ from units.composed_unit import ComposedUnit
 from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
 from units import Unit
-import units
-
 
 def define_units():
     """Define built-in units.
@@ -194,7 +192,7 @@ def define_ridiculous_units():
     
     linear('ly', 'm', 9460730472580800) # light-year
     linear('AU', 'm', 149597870691) # Astronomical unit
-    linear('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec, enable attoparsecs
+    linear('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
 
     linear('smoot', 'cm', 170)
     

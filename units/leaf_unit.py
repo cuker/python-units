@@ -1,7 +1,6 @@
 """Leaf units stand alone. 
 They are not compatible with any other kind of unit."""
 
-import units
 from units import Unit
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException

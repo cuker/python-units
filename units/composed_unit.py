@@ -2,7 +2,6 @@
 (but not other composed units.) 
 Utility methods here for working with abstract fractions."""
 
-import units
 from units import Unit
 from units.compatibility import compatible
 
@@ -140,5 +139,7 @@ class ComposedUnit(object):
                                 self.squeeze() / other.squeeze())
                                 
     def __pow__(self, exponent):
-        return ComposedUnit(self.numer * exponent, self.denom * exponent, self.squeeze() ** exponent)
+        return ComposedUnit(self.numer * exponent, 
+                            self.denom * exponent, 
+                            self.squeeze() ** exponent)
             

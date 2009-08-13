@@ -7,30 +7,39 @@ from units.quantity import Quantity
 from units import Unit
 
 def test_abs():
+    """Absolute value of a quantity is a positive quantity."""
+    
     assert (abs(Quantity(-1, Unit('m'))) ==
             abs(Quantity(1, Unit('m'))) ==
                Quantity(1, Unit('m')))
                
 def test_bool():
+    """Quantities are true if they are non-zero."""
     assert Quantity(1, Unit('m'))
     assert not Quantity(0, Unit('m'))
     
 def test_complex():
+    """Casting to complex drops the unit."""
     assert complex(Quantity(1, Unit('m'))) == complex(1)
     
 def test_float():
+    """Casting to float drops the unit."""
     assert float(Quantity(1, Unit('m'))) == float(1)
     
 def test_hex():
+    """Casting to hex string drops the unit."""
     assert hex(Quantity(1, Unit('m'))) == hex(1)
     
 def test_int():
+    """Casting to int drops the unit."""
     assert int(Quantity(1, Unit('m'))) == int(1)
     
 def test_oct():
+    """Casting to octal string drops the unit."""
     assert oct(Quantity(1, Unit('m'))) == oct(1)
     
 def test_pow():
+    """Exponentiation of quantities."""
     Unit.Registry.clear()
     define_units()
     
