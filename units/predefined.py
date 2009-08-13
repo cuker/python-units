@@ -101,8 +101,8 @@ def name(symbol,
          registry=units.Unit.Registry):
     """Shortcut to create and return a new named unit."""
     return NamedComposedUnit(symbol,
-            ComposedUnit([Unit(x) for x in numer], 
-                                     [Unit(x) for x in denom], 
+            ComposedUnit([Unit(x, registry) for x in numer], 
+                                     [Unit(x, registry) for x in denom],
                                      multiplier,
                                      registry), 
             is_si,
