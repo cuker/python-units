@@ -24,7 +24,14 @@ class Quantity(object):
         """docstring for ensure_same_type"""
         if not compatible(self.unit, other.unit):
             raise IncompatibleUnitsException()
-    
+
+    def __abs__(self):
+        """Absolute value of a quantity."""
+        if self.num < 0:
+            return -self
+        else:
+            return self
+
     def __add__(self, other):
         self._ensure_same_type(other)
         return Quantity(self.num + 
@@ -81,16 +88,34 @@ class Quantity(object):
         return cmp(self.num * self.unit.squeeze(),
                 other.num * other.unit.squeeze())
                 
+    def __complex__(self):
+        return complex(self.num)
+        
+    def __float__(self):
+        return float(self.num)
+        
+    def __hex__(self):
+        return hex(self.num)
+        
+    def __int__(self):
+        return int(self.num)
+                
     def __neg__(self):
         return Quantity(-self.num, self.unit)
     
     def __nonzero__(self):
         return bool(self.num)
-    __bool__ = __nonzero__ # for py3k
+    __bool__ = __nonzero__
+    
+    def __oct__(self):
+        return oct(self.num)
     
     def __pos__(self):
         return self.num > 0
         
+    def __pow__(self, exponent):
+        return Quantity(self.num ** exponent, self.unit ** exponent)
+            
     def __str__(self):
         return str(self.num * self.unit.squeeze()) + ' ' + str(self.unit)
     __repr__ = __str__

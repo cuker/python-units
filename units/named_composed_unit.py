@@ -1,16 +1,9 @@
 """Assign arbitrary new symbols to composed units."""
 import units
+from units import Unit
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
-
-def make(name, composed_unit, is_si=False, registry=units.Unit.Registry):
-    """Give a composed unit a new symbol."""
-
-    if name not in registry:
-        registry[name] = NamedComposedUnit(name, composed_unit, is_si)
-    
-    return registry[name]
 
 class NamedComposedUnit(object):
     """A NamedComposedUnit is a composed unit with its own symbol."""
@@ -33,20 +26,19 @@ class NamedComposedUnit(object):
     def __new__(cls, 
                 name, 
                 composed_unit, 
-                is_si=False, 
-                registry=units.Unit.Registry):
+                is_si=False):
         """Give a composed unit a new symbol."""
 
-        if name not in registry:
-            registry[name] = super(NamedComposedUnit, 
+        if name not in Unit.Registry:
+            Unit.Registry[name] = super(NamedComposedUnit, 
                                    cls).__new__(cls, 
                                                 name, 
                                                 composed_unit, 
                                                 is_si)
 
-        return registry[name]
+        return Unit.Registry[name]
         
-    def __init__(self, name, composed_unit, is_si=False, registry=None):
+    def __init__(self, name, composed_unit, is_si=False):
         self._name = name
         self._composed_unit = composed_unit
         self._si = is_si
@@ -83,3 +75,6 @@ class NamedComposedUnit(object):
             
     def __eq__(self, other):
         return self.composed_unit == other or other == self.composed_unit
+        
+    def __pow__(self, exponent):
+        return self.composed_unit ** exponent

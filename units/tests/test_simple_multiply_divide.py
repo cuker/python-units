@@ -31,3 +31,6 @@ def test_simple_divide_quantity():
     assert (Quantity(8, Unit('m')) / 
             Quantity(2, Unit('s')) ==
             Quantity(4, Unit('m') / Unit('s')))
+
+Unit.Registry.clear()
+assert len(Unit.Registry) == 0

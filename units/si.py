@@ -53,18 +53,16 @@ def without_prefix(unit_str):
         return unit_str[1:]
 
 
-def can_make(unit_str, registry=units.Unit.Registry):
+def can_make(unit_str):
     """True if the given unit string represents an SI unit."""
     return (prefixed(unit_str) and 
-            units.Unit(without_prefix(unit_str), registry).si)
+            units.Unit(without_prefix(unit_str)).si)
         
 
-def make(unit_str, registry=units.Unit.Registry):
+def make(unit_str):
     """Create a unit object from the given SI-unit string."""
     assert can_make(unit_str)
     return NamedComposedUnit(unit_str,
             ComposedUnit([units.Unit(without_prefix(unit_str))],
-                [],
-                multiplier(unit_str),
-                registry),
-            registry)
+                          [],
+                          multiplier(unit_str)))

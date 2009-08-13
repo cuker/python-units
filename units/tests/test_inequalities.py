@@ -160,3 +160,5 @@ def pytest_generate_tests(metafunc):
                 if j > i:
                     metafunc.addcall(funcargs=dict(x=q_group1[0], y=q_group2[0]))
             
+Unit.Registry.clear()
+assert len(Unit.Registry) == 0

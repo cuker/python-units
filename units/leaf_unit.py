@@ -2,6 +2,7 @@
 They are not compatible with any other kind of unit."""
 
 import units
+from units import Unit
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
@@ -21,7 +22,7 @@ class LeafUnit(object):
         return self._unit_str
     unit_str = property(get_unit_str)
         
-    def __new__(cls, symbol, is_si, registry=units.Unit.Registry):
+    def __new__(cls, symbol, is_si):
         """Make a new LeafUnit with the given unit symbol and SI-compatibility.
         A unit that is SI compatible can be prefixed e.g. with k to mean 1000x.
 
@@ -31,12 +32,12 @@ class LeafUnit(object):
         LeafUnit(('mi', False)
 
         """
-        if symbol not in registry:
-            registry[symbol] = super(LeafUnit, cls).__new__(cls, symbol, is_si)
+        if symbol not in Unit.Registry:
+            Unit.Registry[symbol] = super(LeafUnit, cls).__new__(cls)
 
-        return registry[symbol]
+        return Unit.Registry[symbol]
         
-    def __init__(self, unit_str, is_si, registry=None):
+    def __init__(self, unit_str, is_si):
         self._unit_str = unit_str.strip()
         self._si = is_si
               
@@ -72,3 +73,6 @@ class LeafUnit(object):
             return Quantity(quantity.num * quantity.unit.squeeze(), self)
         else:
             raise IncompatibleUnitsException()
+            
+    def __pow__(self, exponent):
+        return ComposedUnit([self] * exponent, [], 1)

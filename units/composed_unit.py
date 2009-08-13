@@ -3,6 +3,7 @@
 Utility methods here for working with abstract fractions."""
 
 import units
+from units import Unit
 from units.compatibility import compatible
 
 def collapse(numer, denom, multiplier):
@@ -72,7 +73,7 @@ def squeeze(numer, denom, multiplier):
 class ComposedUnit(object):
     """A ComposedUnit is a quotient of products of units."""
     
-    def __new__(cls, numer, denom, multiplier=1, registry=units.Unit.Registry):
+    def __new__(cls, numer, denom, multiplier=1):
         """Construct a unit that is a quotient of products of units, 
         including an implicit quantity multiplier."""
        
@@ -85,11 +86,11 @@ class ComposedUnit(object):
             return simpler
 
         key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
-        if key not in registry:
-            registry[key] = super(ComposedUnit, cls).__new__(cls)
-        return registry[key]
+        if key not in Unit.Registry:
+            Unit.Registry[key] = super(ComposedUnit, cls).__new__(cls)
+        return Unit.Registry[key]
     
-    def __init__(self, numer, denom, multiplier=1, registry=None):
+    def __init__(self, numer, denom, multiplier=1):
         (self.numer, self.denom, self.multiplier) = squeeze(numer, 
                                                             denom, 
                                                             multiplier)        
@@ -137,4 +138,7 @@ class ComposedUnit(object):
             return ComposedUnit(self.numer, 
                                 self.denom + [other], 
                                 self.squeeze() / other.squeeze())
+                                
+    def __pow__(self, exponent):
+        return ComposedUnit(self.numer * exponent, self.denom * exponent, self.squeeze() ** exponent)
             

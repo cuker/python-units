@@ -18,26 +18,25 @@ class Unit(object):
     
     Registry = {}
     
-    def __new__(cls, unit_str, registry=Registry):
+    def __new__(cls, unit_str):
         """Create a unit object from a given string specification.
 
-        >>> registry = {}
-        >>> Unit('m', registry=registry) == Unit('m', registry=registry)
+        >>> Unit('m') == Unit('m')
         True
-        >>> Unit('m', registry=registry) != Unit('s', registry=registry)
+        >>> Unit('m') != Unit('s')
         True
         """
-        if unit_str in registry:
-            return registry[unit_str]
-        if units.si.can_make(unit_str, registry):
-            return units.si.make(unit_str, registry)
+        if unit_str in Unit.Registry:
+            return Unit.Registry[unit_str]
+        if units.si.can_make(unit_str):
+            return units.si.make(unit_str)
         else:
-            result = LeafUnit.__new__(LeafUnit, unit_str, False, registry)
+            result = LeafUnit.__new__(LeafUnit, unit_str, False)
             result.__init__(unit_str, False)
             return result
 
 
 import units.si
-from  units.leaf_unit import LeafUnit
+from units.leaf_unit import LeafUnit
 
     
