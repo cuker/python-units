@@ -56,5 +56,5 @@ def can_make(unit_str):
     if prefixed(unit_str):
         unit = REGISTRY.get(without_prefix(unit_str), None)
         if unit:
-            return unit.si
+            return unit.is_si()
     return False

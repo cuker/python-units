@@ -8,11 +8,11 @@ def define_units():
     """Define built-in units.
 
     >>> define_units()
-    >>> unit('Hz').si
+    >>> unit('Hz').is_si()
     True
-    >>> unit('m').si
+    >>> unit('m').is_si()
     True
-    >>> unit('h').si
+    >>> unit('h').is_si()
     False
     """
     define_base_si_units()
@@ -26,7 +26,7 @@ def define_base_si_units():
     """Define the basic SI units.
     
     >>> define_base_si_units()
-    >>> unit('m').si
+    >>> unit('m').is_si()
     True
     """
     # meter, gram, second, ampere, kelvin, mole, candela
@@ -39,7 +39,7 @@ def define_complex_si_units():
     """Define SI units that are built on other SI units.
     
     >>> define_complex_si_units()
-    >>> unit('Hz').si
+    >>> unit('Hz').is_si()
     True
     """
     for sym in ["rad", "sr"]:  
@@ -72,7 +72,7 @@ def define_time_units():
     >>> define_base_si_units()
     >>> define_time_units()
     >>> hour = unit('h')
-    >>> hour.si
+    >>> hour.is_si()
     False
     >>> from units.quantity import Quantity
     >>> half_hour = Quantity(0.5, hour)
@@ -84,7 +84,7 @@ def define_time_units():
     >>> within_epsilon(thirty_one, sum)
     True
     """
-    assert unit('s').si # Ensure SI units already defined.
+    assert unit('s').is_si() # Ensure SI units already defined.
     
     linear('min', 's', 60.)
     linear('h', 'min', 60.)
@@ -103,7 +103,7 @@ def define_volumes():
     True
     """
     # Dangerous unit, 3L gives a long int.
-    assert unit('m').si
+    assert unit('m').is_si()
     NamedComposedUnit("L", unit("cm") ** 3, is_si=True)     
     
     linear('tsp', 'mL', 5)
@@ -113,7 +113,7 @@ def define_volumes():
 def define_imperial_units():
     """Define some common imperial units."""
     
-    assert unit('m').si # Ensure SI units already defined
+    assert unit('m').is_si() # Ensure SI units already defined
     
     # linear measures
     linear('inch', 'cm', 2.54) # 'in' is a python keyword

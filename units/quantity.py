@@ -9,7 +9,7 @@ class Quantity(object):
     """A number with a unit attached."""
     
     def __new__(cls, num, unit):
-        if hasattr(unit, 'si'):
+        if hasattr(unit, 'is_si'):
             return super(Quantity, cls).__new__(cls)
         else:
             return num * unit

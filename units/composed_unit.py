@@ -2,6 +2,7 @@
 (but not other composed units.) 
 Utility methods here for working with abstract fractions."""
 
+from units.abstract import AbstractUnit
 from units.compatibility import compatible
 
 def unbox(numer, denom, multiplier):
@@ -82,7 +83,7 @@ def squeeze(numer, denom):
     return (simpler_numer, simpler_denom, result_mult)
 
 
-class ComposedUnit(object):
+class ComposedUnit(AbstractUnit):
     """A ComposedUnit is a quotient of products of units."""
     
     def __new__(cls, numer, denom, multiplier=1):
@@ -101,6 +102,8 @@ class ComposedUnit(object):
         return super(ComposedUnit, cls).__new__(cls)
     
     def __init__(self, numer, denom, multiplier=1):
+        super(ComposedUnit, self).__init__(is_si=False)
+
         (self.numer, self.denom, self.multiplier) = squeeze(numer, 
                                                             denom)    
         self.multiplier *= multiplier
@@ -108,9 +111,7 @@ class ComposedUnit(object):
         self.orig_numer = numer
         self.orig_denom = denom
         self.orig_multiplier = multiplier        
-    
-    si = property(lambda self: False)
-             
+                 
     def __str__(self):
         if self.denom:
             return (('*'.join([str(x) for x in self.numer]) or '1') + " / "
@@ -146,7 +147,7 @@ class ComposedUnit(object):
         else:
             return ComposedUnit(self.numer + [other], 
                                 self.denom, 
-                                self.squeeze() * other.squeeze())
+                                self.squeeze())
             
     def invert(self):
         """Return (this unit)^-1."""

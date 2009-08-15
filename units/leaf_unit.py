@@ -1,20 +1,13 @@
 """Leaf units stand alone. 
 They are not compatible with any other kind of unit."""
 
-from units.compatibility import compatible
-from units.exception import IncompatibleUnitsException
-from units.quantity import Quantity
+from units.abstract import AbstractUnit
 from units.registry import REGISTRY
 from units.composed_unit import ComposedUnit
     
-class LeafUnit(object):
+class LeafUnit(AbstractUnit):
     """Leaf units are not compatible with other units, but they can be 
     composed to make other units."""
-    
-    def is_si(self):
-        """True if the unit can take SI prefixes."""
-        return self._si
-    si = property(is_si)
     
     def get_specifier(self):
         """Return the symbol of the unit."""
@@ -32,21 +25,21 @@ class LeafUnit(object):
         SI-compatibility. A unit that is SI compatible can be prefixed, 
         e.g. with k to mean 1000x.
         """
+        super(LeafUnit, self).__init__(is_si)
+        
         self._specifier = specifier
-        self._si = is_si
               
     __str__ = get_specifier
 
     def __repr__(self):
         return ("LeafUnit(" + 
                 ", ".join([repr(x) for x in [self.specifier,
-                                             self.si]]) + 
+                                             self.is_si()]]) + 
                 ")")
 
     def __mul__(self, other):
         if hasattr(other, "numer"):
             return other * self
-        
         else:
             return ComposedUnit([self, other], [])
     
@@ -64,14 +57,9 @@ class LeafUnit(object):
         """A LeafUnit is its own canonical form."""
         return self
         
-    squeeze = lambda self: 1
-    
-    def __call__(self, quantity):
-        """Overload the function call operator to convert units."""
-        if compatible(self, quantity.unit):
-            return Quantity(quantity.num * quantity.unit.squeeze(), self)
-        else:
-            raise IncompatibleUnitsException()
+    def squeeze(self):
+        """A LeafUnit has no implicit quantity."""
+        return 1
             
     def __pow__(self, exponent):
         return ComposedUnit([self] * exponent, [], 1)

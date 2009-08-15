@@ -1,10 +1,9 @@
 """Assign arbitrary new symbols to composed units."""
-from units.registry import REGISTRY
-from units.compatibility import compatible
-from units.exception import IncompatibleUnitsException
-from units.quantity import Quantity
 
-class NamedComposedUnit(object):
+from units.abstract import AbstractUnit
+from units.registry import REGISTRY
+
+class NamedComposedUnit(AbstractUnit):
     """A NamedComposedUnit is a composed unit with its own symbol."""
 
     def get_name(self):
@@ -17,11 +16,6 @@ class NamedComposedUnit(object):
         return self._composed_unit
     composed_unit = property(get_composed_unit)
     
-    def get_si(self):
-        """Whether this composed unit can accept SI prefixes"""
-        return self._si
-    si = property(get_si)
-
     def __new__(cls, 
                 name, 
                 composed_unit, 
@@ -35,15 +29,25 @@ class NamedComposedUnit(object):
         return REGISTRY[name]
         
     def __init__(self, name, composed_unit, is_si=False):
+        super(NamedComposedUnit, self).__init__(is_si)
         self._name = name
         self._composed_unit = composed_unit
-        self._si = is_si
 
-    def __getattr__(self, name):
-        return getattr(self.composed_unit, name)
+    def invert(self):
+        """Return the invert of the underlying composed unit."""
+        return self.composed_unit.invert()
+
+    def canonical(self):
+        """Return the canonical of the underlying composed unit."""
+        return self.composed_unit.canonical()
         
+    def squeeze(self):
+        """Return the squeeze of the underlying composed unit."""
+        return self.composed_unit.squeeze()
+    
     def __mul__(self, other):
         return self.composed_unit * other
+    
     def __div__(self, other):
         return self.composed_unit / other
         
@@ -53,15 +57,8 @@ class NamedComposedUnit(object):
         return ("NamedComposedUnit(" + 
                 ", ".join([repr(x) for x in [self.name, 
                                              self.composed_unit,
-                                             self.si]])+
+                                             self.is_si()]])+
                 ")")
-
-    def __call__(self, quantity):
-        """Overload the function call operator to convert units."""
-        if compatible(self, quantity.unit):
-            return Quantity(quantity.num * quantity.unit.squeeze(), self)
-        else:
-            raise IncompatibleUnitsException()
             
     def __eq__(self, other):
         return self.composed_unit == other or other == self.composed_unit

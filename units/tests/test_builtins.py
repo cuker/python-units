@@ -1,7 +1,7 @@
 """Tests for the Python built-in functions when applied
 to Quantities.
 """
-
+from units.compatibility import within_epsilon
 from units.predefined import define_units
 from units.quantity import Quantity
 from units.registry import REGISTRY
@@ -46,15 +46,17 @@ def test_pow():
     
     m_unit = unit('m')
     m_quant = Quantity(2, m_unit)
+
     assert (m_quant ** 2 ==
             m_quant * m_quant ==
             pow(m_quant, 2))
 
     cm_unit = unit('cm')
     cm_quant = Quantity(2, cm_unit)
-    assert (cm_quant ** 2 ==
-            cm_quant * cm_quant ==
-            pow(cm_quant, 2))
+
+    assert within_epsilon(cm_quant ** 2, cm_quant * cm_quant)
+    assert within_epsilon(cm_quant ** 2, pow(cm_quant, 2))
+
 
 REGISTRY.clear()
 
