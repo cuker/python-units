@@ -1,10 +1,11 @@
 """Tests for addition and subtraction of Quantities"""
 
-# Work around figleaf bug.
-try:
-    import py.test
-except ImportError:
-    pass
+# Disable pylint and figleaf warnings about not being able to import py.test.
+# pylint: disable-msg=F0401,C0321
+try: import py.test 
+except ImportError: pass
+# pylint: enable-msg=F0401,C0321
+
 from units import unit
 from units.compatibility import within_epsilon
 from units.composed_unit import ComposedUnit
