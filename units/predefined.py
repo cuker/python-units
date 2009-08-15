@@ -2,17 +2,17 @@
 from units.composed_unit import ComposedUnit
 from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
-from units import Unit, name, linear
+from units import unit, name, linear
 
 def define_units():
     """Define built-in units.
 
     >>> define_units()
-    >>> Unit('Hz').si
+    >>> unit('Hz').si
     True
-    >>> Unit('m').si
+    >>> unit('m').si
     True
-    >>> Unit('h').si
+    >>> unit('h').si
     False
     """
     define_base_si_units()
@@ -26,7 +26,7 @@ def define_base_si_units():
     """Define the basic SI units.
     
     >>> define_base_si_units()
-    >>> Unit('m').si
+    >>> unit('m').si
     True
     """
     # meter, gram, second, ampere, kelvin, mole, candela
@@ -39,7 +39,7 @@ def define_complex_si_units():
     """Define SI units that are built on other SI units.
     
     >>> define_complex_si_units()
-    >>> Unit('Hz').si
+    >>> unit('Hz').si
     True
     """
     for sym in ["rad", "sr"]:  
@@ -71,20 +71,20 @@ def define_time_units():
     >>> from units.compatibility import within_epsilon
     >>> define_base_si_units()
     >>> define_time_units()
-    >>> hour = Unit('h')
+    >>> hour = unit('h')
     >>> hour.si
     False
     >>> from units.quantity import Quantity
     >>> half_hour = Quantity(0.5, hour)
-    >>> few_secs = Quantity(60.0, Unit('s'))
+    >>> few_secs = Quantity(60.0, unit('s'))
     >>> sum = half_hour + few_secs
     
-    >>> mins = Unit('min')
+    >>> mins = unit('min')
     >>> thirty_one = Quantity(31, mins)
     >>> within_epsilon(thirty_one, sum)
     True
     """
-    assert Unit('s').si # Ensure SI units already defined.
+    assert unit('s').si # Ensure SI units already defined.
     
     linear('min', 's', 60.)
     linear('h', 'min', 60.)
@@ -98,13 +98,13 @@ def define_volumes():
     >>> from units.quantity import Quantity
     >>> define_base_si_units()
     >>> define_volumes()
-    >>> one_litre = Quantity(520, Unit('mL')) + Quantity(2, Unit('cups'))
-    >>> one_litre == Quantity(1, Unit('L'))
+    >>> one_litre = Quantity(520, unit('mL')) + Quantity(2, unit('cups'))
+    >>> one_litre == Quantity(1, unit('L'))
     True
     """
     # Dangerous unit, 3L gives a long int.
-    assert Unit('m').si
-    NamedComposedUnit("L", Unit("cm") ** 3, is_si=True)     
+    assert unit('m').si
+    NamedComposedUnit("L", unit("cm") ** 3, is_si=True)     
     
     linear('tsp', 'mL', 5)
     linear('tbsp', 'mL', 15)
@@ -113,7 +113,7 @@ def define_volumes():
 def define_imperial_units():
     """Define some common imperial units."""
     
-    assert Unit('m').si # Ensure SI units already defined
+    assert unit('m').si # Ensure SI units already defined
     
     # linear measures
     linear('inch', 'cm', 2.54) # 'in' is a python keyword
@@ -135,13 +135,13 @@ def define_imperial_units():
     
     # area measure
     NamedComposedUnit('acre',
-                      ComposedUnit([Unit('rd'), Unit('rd')],
+                      ComposedUnit([unit('rd'), unit('rd')],
                                    [],
                                    160))
                                    
     # liquid measures
     NamedComposedUnit('pt', 
-                      ComposedUnit([Unit('inch')] * 3,
+                      ComposedUnit([unit('inch')] * 3,
                                    [],
                                    28.875)) # pint
     
@@ -181,7 +181,7 @@ def define_ridiculous_units():
     
     >>> define_units()
     >>> from units.quantity import Quantity
-    >>> Quantity(1, Unit('keg')) / Quantity(1, Unit('bottle'))
+    >>> Quantity(1, unit('keg')) / Quantity(1, unit('bottle'))
     140.8450704225352
     """
     
@@ -196,7 +196,7 @@ def define_ridiculous_units():
     
     linear('hiroshima', 'J', 6.3 * 10 ** 13)
     
-    NamedComposedUnit('flop', Unit('operation') / Unit('s'), is_si=True)
+    NamedComposedUnit('flop', unit('operation') / unit('s'), is_si=True)
     linear('B', 'bit', 8, is_si=True)  # byte
     
     linear('bottle', 'mL', 355)

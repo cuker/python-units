@@ -19,12 +19,12 @@ from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
 from units.registry import REGISTRY
 
-def Unit(specifier):
+def unit(specifier):
     """Main factory for units.
     
-    >>> Unit('m') == Unit('m')
+    >>> unit('m') == unit('m')
     True
-    >>> Unit('m') != Unit('s')
+    >>> unit('m') != unit('s')
     True
     """
     if specifier in REGISTRY:
@@ -41,8 +41,8 @@ def name(symbol,
          is_si=True):
     """Shortcut to create and return a new named unit."""
     
-    numer_units = [Unit(x) for x in numer]
-    denom_units = [Unit(x) for x in denom]
+    numer_units = [unit(x) for x in numer]
+    denom_units = [unit(x) for x in denom]
     
     return NamedComposedUnit(symbol,
             ComposedUnit(numer_units, 
@@ -54,7 +54,7 @@ def linear(new_symbol, base_symbol, multiplier, is_si=False):
     """Shortcut to create and return a new unit that is 
     a linear multiplication of another."""
     return NamedComposedUnit(new_symbol, 
-                             ComposedUnit([Unit(base_symbol)], 
+                             ComposedUnit([unit(base_symbol)], 
                                           [], 
                                           multiplier), 
                              is_si)

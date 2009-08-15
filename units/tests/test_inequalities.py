@@ -18,26 +18,26 @@ try:
 except ImportError:
     pass
     
-from units import Unit
+from units import unit
 from units.composed_unit import ComposedUnit
 from units.exception import IncompatibleUnitsException
 from units.named_composed_unit import NamedComposedUnit
 from units.quantity import Quantity
 from units.registry import REGISTRY
 
-CVEL = Unit('m') / Unit('s')
+CVEL = unit('m') / unit('s')
 
 VEL = NamedComposedUnit("VEL", CVEL)
 
 COMPATIBLE_QUANTITIES = [[Quantity(0, VEL), Quantity(1, VEL)],
                          [Quantity(0, CVEL), Quantity(1, CVEL)]]
 
-ALL_UNITS = [Unit('m') / Unit('s'), 
-             Unit('m') * Unit('s'), 
-             Unit('m'), Unit('s'),
-             NamedComposedUnit("Hz", ComposedUnit([], [Unit('s')])),
+ALL_UNITS = [unit('m') / unit('s'), 
+             unit('m') * unit('s'), 
+             unit('m'), unit('s'),
+             NamedComposedUnit("Hz", ComposedUnit([], [unit('s')])),
              NamedComposedUnit("L", 
-                               ComposedUnit([Unit('m')] * 3, 
+                               ComposedUnit([unit('m')] * 3, 
                                             [], 
                                             multiplier=0.001))]
 

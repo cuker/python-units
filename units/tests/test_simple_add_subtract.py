@@ -5,7 +5,7 @@ try:
     import py.test
 except ImportError:
     pass
-from units import Unit
+from units import unit
 from units.compatibility import within_epsilon
 from units.composed_unit import ComposedUnit
 from units.exception import IncompatibleUnitsException
@@ -17,15 +17,15 @@ from units.registry import REGISTRY
 def test_good_simple_add():
     """Two quantities with the same unit should add together."""
     
-    assert (Quantity(2, Unit('m')) + 
-            Quantity(2, Unit('m')) == 
-            Quantity(4, Unit('m')))
+    assert (Quantity(2, unit('m')) + 
+            Quantity(2, unit('m')) == 
+            Quantity(4, unit('m')))
     
 def add_bad():
     """Incompatible leaf units should not add together."""
     
-    metres = Quantity(2, Unit('m'))
-    seconds = Quantity(2, Unit('s'))
+    metres = Quantity(2, unit('m'))
+    seconds = Quantity(2, unit('s'))
     return metres + seconds
     
 def test_bad_simple_add():
@@ -35,15 +35,15 @@ def test_bad_simple_add():
 def test_good_simple_sub():
     """Should be able to subtract compatible Quantities."""
     
-    assert (Quantity(4, Unit('m')) - 
-            Quantity(2, Unit('m')) == 
-            Quantity(2, Unit('m')))
+    assert (Quantity(4, unit('m')) - 
+            Quantity(2, unit('m')) == 
+            Quantity(2, unit('m')))
     
 def subtract_bad():
     """Incompatible leaf units should not subtract from one another."""
     
-    metres = Quantity(2, Unit('m'))
-    seconds = Quantity(2, Unit('s'))
+    metres = Quantity(2, unit('m'))
+    seconds = Quantity(2, unit('s'))
     return metres - seconds
     
 def test_bad_simple_sub():
@@ -53,19 +53,19 @@ def test_bad_simple_sub():
 def test_good_composed_add():
     """Two quantities with the same complex units should add together"""
     
-    assert (Quantity(2, Unit('m') / 
-                        Unit('s')) +
-            Quantity(3, Unit('m') / 
-                        Unit('s')) ==
-            Quantity(5, Unit('m') / 
-                        Unit('s')))
+    assert (Quantity(2, unit('m') / 
+                        unit('s')) +
+            Quantity(3, unit('m') / 
+                        unit('s')) ==
+            Quantity(5, unit('m') / 
+                        unit('s')))
     
 def test_good_named_add():
     """Two quantities with the same named complex units should add together"""
     
     furlong = NamedComposedUnit(
                 'furlong', 
-                ComposedUnit([Unit('m')], 
+                ComposedUnit([unit('m')], 
                              [], 
                              multiplier=201.168),
                 is_si=False) 
@@ -81,13 +81,13 @@ def test_good_mixed_add():
     
     gray = NamedComposedUnit(
             'gray',
-            ComposedUnit([Unit('J'), 
-                          Unit('kg')],
+            ComposedUnit([unit('J'), 
+                          unit('kg')],
                           []),
             is_si=True)
             
-    sievert = ComposedUnit([Unit('J'), 
-                            Unit('kg')], 
+    sievert = ComposedUnit([unit('J'), 
+                            unit('kg')], 
                            [])
     
     assert(Quantity(2, gray) + 
@@ -105,10 +105,10 @@ def test_good_add_w_mult():
     they have the same multiplier"""
     
 
-    moon = ComposedUnit([Unit('day')], 
+    moon = ComposedUnit([unit('day')], 
                         [], 
                         multiplier=28)
-    lunar_cycle = ComposedUnit([Unit('day')], 
+    lunar_cycle = ComposedUnit([unit('day')], 
                                [], 
                                multiplier=28)
     
@@ -127,16 +127,16 @@ def test_good_add_w_mults():
     even when they have different multipliers"""
     
     
-    mile = ComposedUnit([Unit('m')], 
+    mile = ComposedUnit([unit('m')], 
                         [], 
                         multiplier=1609.344)
-    kilometre = ComposedUnit([Unit('m')], 
+    kilometre = ComposedUnit([unit('m')], 
                              [], 
                              multiplier=1000)   
     
     m_on_left = Quantity(1, mile) + Quantity(1, kilometre)
     km_on_left = Quantity(1, kilometre) + Quantity(1, mile)
-    manual_sum = Quantity(2609.344, Unit('m'))
+    manual_sum = Quantity(2609.344, unit('m'))
             
     assert within_epsilon(m_on_left, km_on_left)
     assert within_epsilon(km_on_left, m_on_left)
@@ -149,12 +149,12 @@ def test_good_named_add_w_mults():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should add together."""
     
-    mile = Unit('mi')
-    kilometre = Unit('km')
+    mile = unit('mi')
+    kilometre = unit('km')
     
     assert within_epsilon(Quantity(1, mile) + Quantity(1, kilometre),
                           Quantity(1, kilometre) + Quantity(1, mile))
-    assert within_epsilon(Quantity(2609.344, Unit('m')),
+    assert within_epsilon(Quantity(2609.344, unit('m')),
                           Quantity(1, kilometre) + Quantity(1, mile))
     
 
@@ -164,28 +164,28 @@ def test_good_named_add_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
     should add to a composed unit that has a multiplier"""
     
-    mile = Unit('mi').composed_unit
-    kilometre = Unit('km')
+    mile = unit('mi').composed_unit
+    kilometre = unit('km')
                                                
     assert within_epsilon(Quantity(1, mile) + Quantity(1, kilometre), 
                           Quantity(1, kilometre) + Quantity(1, mile))
-    assert within_epsilon(Quantity(2609.344, Unit('m')),
+    assert within_epsilon(Quantity(2609.344, unit('m')),
                           Quantity(1, kilometre) + Quantity(1, mile))
            
 def test_good_composed_sub():
     """Two quantities with the same complex units should sub together"""
     
-    assert (Quantity(5, Unit('m') / 
-                        Unit('s')) -
-            Quantity(3, Unit('m') / 
-                        Unit('s')) ==
-            Quantity(2, Unit('m') / 
-                        Unit('s')))
+    assert (Quantity(5, unit('m') / 
+                        unit('s')) -
+            Quantity(3, unit('m') / 
+                        unit('s')) ==
+            Quantity(2, unit('m') / 
+                        unit('s')))
     
 def test_good_named_sub():
     """Two quantities with the same named complex units should sub together"""
     
-    furlong = Unit('fur')
+    furlong = unit('fur')
                 
     assert (Quantity(4, furlong) -
             Quantity(2, furlong) ==
@@ -196,9 +196,9 @@ def test_good_mixed_sub():
     """Two quantities with the same units should sub together 
     even if one is named"""
     
-    gray = Unit('Gy')
+    gray = unit('Gy')
             
-    sievert = Unit('Sv').composed_unit
+    sievert = unit('Sv').composed_unit
     
     assert(Quantity(4, gray) - 
            Quantity(2, sievert) ==
@@ -215,10 +215,10 @@ def test_good_sub_w_mult():
     they have the same multiplier"""
     
 
-    moon = ComposedUnit([Unit('day')], 
+    moon = ComposedUnit([unit('day')], 
                         [], 
                         multiplier=28)
-    lunar_cycle = ComposedUnit([Unit('day')], 
+    lunar_cycle = ComposedUnit([unit('day')], 
                                [], 
                                multiplier=28)
     
@@ -236,13 +236,13 @@ def test_good_sub_w_mults():
     """Two quantities with compatible units should sub together 
     even when they have different multipliers"""
     
-    mile = Unit('mi').composed_unit
-    kilometre = Unit('km').composed_unit   
+    mile = unit('mi').composed_unit
+    kilometre = unit('km').composed_unit   
     
     m_on_left = Quantity(1, mile) - Quantity(1, kilometre)
     km_on_left = Quantity(1, kilometre) - Quantity(1, mile)
-    m_on_left_diff = Quantity(609.344, Unit('m'))
-    km_on_left_diff = Quantity(-609.344, Unit('m'))
+    m_on_left_diff = Quantity(609.344, unit('m'))
+    km_on_left_diff = Quantity(-609.344, unit('m'))
             
     assert within_epsilon(m_on_left, m_on_left_diff)
     assert within_epsilon(km_on_left, km_on_left_diff)
@@ -252,27 +252,27 @@ def test_good_named_sub_w_mults():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should sub together."""
 
-    mile = Unit('mi')
-    kilometre = Unit('km')
+    mile = unit('mi')
+    kilometre = unit('km')
     
     assert within_epsilon(Quantity(1, mile) - Quantity(1, kilometre),
-                          Quantity(609.344, Unit('m')))
+                          Quantity(609.344, unit('m')))
            
     assert within_epsilon(Quantity(1, kilometre) - Quantity(1, mile),
-                          Quantity(-609.344, Unit('m')))
+                          Quantity(-609.344, unit('m')))
     
 def test_good_named_sub_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
     should sub to a composed unit that has a multiplier"""
     
-    mile = Unit('mi').composed_unit
-    kilometre = Unit('km')
+    mile = unit('mi').composed_unit
+    kilometre = unit('km')
                                                
     assert within_epsilon(Quantity(1, mile) - Quantity(1, kilometre),
-                          Quantity(609.344, Unit('m')))
+                          Quantity(609.344, unit('m')))
            
     assert within_epsilon(Quantity(1, kilometre) - Quantity(1, mile),
-                          Quantity(-609.344, Unit('m')))
+                          Quantity(-609.344, unit('m')))
 
 def setup_module(mod):
     define_units()
