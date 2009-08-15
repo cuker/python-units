@@ -274,8 +274,14 @@ def test_good_named_sub_w_mult():
     assert within_epsilon(Quantity(1, kilometre) - Quantity(1, mile),
                           Quantity(-609.344, unit('m')))
 
-def setup_module(mod):
+def setup_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called by py.test before running any of the tests here."""
     define_units()
 
-def teardown_module(mod):
+def teardown_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called after running all of the tests here."""
     REGISTRY.clear()
