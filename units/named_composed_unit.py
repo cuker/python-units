@@ -24,7 +24,10 @@ class NamedComposedUnit(AbstractUnit):
 
         if name not in REGISTRY:
             REGISTRY[name] = super(NamedComposedUnit, 
-                                   cls).__new__(cls)
+                                   cls).__new__(cls,
+                                                name,
+                                                composed_unit,
+                                                is_si)
 
         return REGISTRY[name]
         

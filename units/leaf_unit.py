@@ -17,7 +17,7 @@ class LeafUnit(AbstractUnit):
         
     def __new__(cls, specifier, is_si):
         if specifier not in REGISTRY:
-            REGISTRY[specifier] = super(LeafUnit, cls).__new__(cls)
+            REGISTRY[specifier] = super(LeafUnit, cls).__new__(cls, is_si)
         return REGISTRY[specifier]
         
     def __init__(self, specifier, is_si):
