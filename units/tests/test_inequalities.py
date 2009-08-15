@@ -20,9 +20,10 @@ except ImportError:
     
 from units import Unit
 from units.composed_unit import ComposedUnit
+from units.exception import IncompatibleUnitsException
 from units.named_composed_unit import NamedComposedUnit
 from units.quantity import Quantity
-from units.exception import IncompatibleUnitsException
+from units.registry import REGISTRY
 
 CVEL = Unit('m') / Unit('s')
 
@@ -199,5 +200,4 @@ def pytest_generate_tests(metafunc):
                     metafunc.addcall(funcargs=dict(quant1=q_group1[0],
                                                    quant2=q_group2[0]))
 
-Unit.Registry.clear()
-assert len(Unit.Registry) == 0
+REGISTRY.clear()

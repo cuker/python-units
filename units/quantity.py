@@ -7,6 +7,13 @@ from units.exception import IncompatibleUnitsException
 
 class Quantity(object):
     """A number with a unit attached."""
+    
+    def __new__(cls, num, unit):
+        if hasattr(unit, 'si'):
+            return super(Quantity, cls).__new__(cls)
+        else:
+            return num * unit
+    
     def __init__(self, num, unit):
         self._num, self._unit = num, unit
 
@@ -117,5 +124,9 @@ class Quantity(object):
         return Quantity(self.num ** exponent, self.unit ** exponent)
             
     def __str__(self):
-        return str(self.num * self.unit.squeeze()) + ' ' + str(self.unit)
-    __repr__ = __str__
+        return str(self.num) + ' ' + str(self.unit)
+
+    def __repr__(self):
+        return ("Quantity(" + 
+                ", ".join([repr(x) for x in [self.num, self.unit]]) +
+                ")")

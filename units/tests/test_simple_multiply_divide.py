@@ -3,6 +3,7 @@
 from units import Unit
 from units.quantity import Quantity
 from units.named_composed_unit import NamedComposedUnit
+from units.registry import REGISTRY
 
 def test_simple_multiply():
     """Simple multiplication of units."""
@@ -113,5 +114,4 @@ def test_rdivide_named_scalar():
             Quantity(2, Unit('s') / Unit('m')))
 
 
-Unit.Registry.clear()
-assert len(Unit.Registry) == 0
+REGISTRY.clear()

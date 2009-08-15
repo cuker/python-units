@@ -4,6 +4,7 @@ to Quantities.
 
 from units.predefined import define_units
 from units.quantity import Quantity
+from units.registry import REGISTRY
 from units import Unit
 
 def test_abs():
@@ -40,7 +41,7 @@ def test_oct():
     
 def test_pow():
     """Exponentiation of quantities."""
-    Unit.Registry.clear()
+    REGISTRY.clear()
     define_units()
     
     m_unit = Unit('m')
@@ -55,6 +56,5 @@ def test_pow():
             cm_quant * cm_quant ==
             pow(cm_quant, 2))
 
-Unit.Registry.clear()
-assert len(Unit.Registry) == 0
+REGISTRY.clear()
 

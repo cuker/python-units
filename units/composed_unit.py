@@ -2,10 +2,9 @@
 (but not other composed units.) 
 Utility methods here for working with abstract fractions."""
 
-from units import Unit
 from units.compatibility import compatible
 
-def collapse(numer, denom, multiplier):
+def unbox(numer, denom, multiplier):
     """Attempts to convert the fractional unit represented by the parameters
     into another, simpler type. Returns the simpler unit or None if no 
     simplification is possible.
@@ -28,46 +27,60 @@ def cancel(numer, denom):
     simple_numer = numer[:]
     simple_denom = denom[:]
     
-    for nleaf in simple_numer:
-        for dleaf in simple_denom:
+    for nleaf in numer:
+        remaining_denom = simple_denom[:]
+        for dleaf in remaining_denom:
             if compatible(nleaf, dleaf):
                 multiplier *= nleaf.squeeze() / dleaf.squeeze()
                 simple_numer.remove(nleaf)
                 simple_denom.remove(dleaf)
-                
-    return (multiplier, simple_numer, simple_denom)
+                break
+            
+    return (simple_numer, simple_denom, multiplier)
     
-def wring(lst):
-    """Reduce each unit in lst to its canonical form.
-    Return a tuple of the combined quantity multiplier from the units 
-    and the new units."""
-    multiplier = 1
-    result = []
-    for unit in lst:
-        multiplier *= unit.squeeze()
-        result.append(unit.canonical())
-        
-    return (multiplier, result)
-    
-def squeeze(numer, denom, multiplier):
-    """Return this unit's implicit quantity multiplier.
+def squeeze(numer, denom):
+    """Simplify.
     
     Some units imply quantities. For example, a kilometre implies a quantity
     of a thousand metres. This 'squeezes' out these implied quantities, 
     returning a modified multiplier and simpler units."""
-    (mult, simple_numer, simple_denom) = cancel(numer, denom)
+    
+    result_numer = []
+    result_denom = []
+    result_mult = 1
+    
+    for unit in numer:
+        while hasattr(unit, 'composed_unit'):
+            unit = unit.composed_unit
+        
+        if hasattr(unit, 'numer'):
+            result_numer += unit.numer
+            result_denom += unit.denom
+            result_mult *= unit.squeeze()
+        else:
+            result_numer += [unit]
 
-    multiplier *= mult
+    for unit in denom:
+        while hasattr(unit, 'composed_unit'):
+            unit = unit.composed_unit
+        
+        if hasattr(unit, 'numer'):
+            result_denom += unit.numer
+            result_numer += unit.denom
+            result_mult /= unit.squeeze()
+        else:
+            result_denom += [unit]
     
-    wrung_mult, wrung_numer = wring(simple_numer)
-    wrung_div, wrung_denom = wring(simple_denom)
+    result_numer.sort()
+    result_denom.sort()
     
-    multiplier *= wrung_mult / wrung_div
+    (simpler_numer, simpler_denom, cancellation_mult) = cancel(result_numer, 
+                                                               result_denom)
     
-    wrung_numer.sort()
-    wrung_denom.sort()
+    result_mult *= cancellation_mult
     
-    return (wrung_numer, wrung_denom, multiplier)
+    return (simpler_numer, simpler_denom, result_mult)
+
 
 class ComposedUnit(object):
     """A ComposedUnit is a quotient of products of units."""
@@ -75,24 +88,26 @@ class ComposedUnit(object):
     def __new__(cls, numer, denom, multiplier=1):
         """Construct a unit that is a quotient of products of units, 
         including an implicit quantity multiplier."""
-       
-        (wrung_numer, wrung_denom, wrung_multiplier) = squeeze(numer, 
-                                                               denom, 
-                                                               multiplier)
+                
+        (squeezed_numer, squeezed_denom, squeezed_multiplier) = squeeze(numer,
+                                                                        denom)
+                                                               
+        multiplier *= squeezed_multiplier
 
-        simpler = collapse(wrung_numer, wrung_denom, multiplier)
-        if simpler:
-            return simpler
+        unboxed = unbox(squeezed_numer, squeezed_denom, multiplier)
+        if unboxed:
+            return unboxed
 
-        key = (multiplier, tuple(wrung_numer), tuple(wrung_denom))
-        if key not in Unit.Registry:
-            Unit.Registry[key] = super(ComposedUnit, cls).__new__(cls)
-        return Unit.Registry[key]
+        return super(ComposedUnit, cls).__new__(cls)
     
     def __init__(self, numer, denom, multiplier=1):
         (self.numer, self.denom, self.multiplier) = squeeze(numer, 
-                                                            denom, 
-                                                            multiplier)        
+                                                            denom)    
+        self.multiplier *= multiplier
+        
+        self.orig_numer = numer
+        self.orig_denom = denom
+        self.orig_multiplier = multiplier        
     
     si = property(lambda self: False)
              
@@ -102,15 +117,22 @@ class ComposedUnit(object):
                     + '*'.join([str(x) for x in self.denom]))
         else:
             return '*'.join([str(x) for x in self.numer])
-    __repr__ = __str__
-            
+
+    def __repr__(self):
+        return ("ComposedUnit(" + 
+                ", ".join([repr(x) for x in [self.orig_numer,
+                                             self.orig_denom,
+                                             self.orig_multiplier]]) + 
+                ")")
+
     def canonical(self):
-        """Return an immutable, comparable version of this unit."""
+        """Return an immutable, comparable version of this unit, 
+        dropping any multiplier."""
         if self.denom or len(self.numer) != 1:
             return (tuple(self.numer), tuple(self.denom))
         else:
             return self.numer[0]
-        
+
     def squeeze(self):
         """Return this unit's implicit quantity multiplier."""
         return self.multiplier

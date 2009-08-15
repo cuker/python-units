@@ -2,7 +2,7 @@
 from units.composed_unit import ComposedUnit
 from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
-from units import Unit
+from units import Unit, name, linear
 
 def define_units():
     """Define built-in units.
@@ -18,11 +18,8 @@ def define_units():
     define_base_si_units()
     define_complex_si_units()
     define_time_units()
-
     define_volumes()
-    
     define_imperial_units()
-    
     define_ridiculous_units()
 
 def define_base_si_units():
@@ -71,27 +68,28 @@ def define_complex_si_units():
 def define_time_units():
     """Define some common time units.
     
+    >>> from units.compatibility import within_epsilon
+    >>> define_base_si_units()
     >>> define_time_units()
     >>> hour = Unit('h')
     >>> hour.si
     False
-    
     >>> from units.quantity import Quantity
     >>> half_hour = Quantity(0.5, hour)
-    >>> few_secs = Quantity(60, Unit('s'))
+    >>> few_secs = Quantity(60.0, Unit('s'))
     >>> sum = half_hour + few_secs
     
-    >> mins = Unit('min')
-    >> thirty_one = Quantity(31, mins)
-    >> thirty_one == sum
+    >>> mins = Unit('min')
+    >>> thirty_one = Quantity(31, mins)
+    >>> within_epsilon(thirty_one, sum)
     True
     """
     assert Unit('s').si # Ensure SI units already defined.
     
-    linear('min', 's', 60)
-    linear('h', 'min', 60)
-    linear('day', 'h', 24)
-    linear('wk', 'day', 7)
+    linear('min', 's', 60.)
+    linear('h', 'min', 60.)
+    linear('day', 'h', 24.)
+    linear('wk', 'day', 7.)
     
 def define_volumes():
     """Define some common kitchen volumes.
@@ -119,7 +117,7 @@ def define_imperial_units():
     
     # linear measures
     linear('inch', 'cm', 2.54) # 'in' is a python keyword
-    linear('ft', 'inch', 22) # foot
+    linear('ft', 'inch', 12) # foot
     linear('yd', 'ft', 3) # yard
     linear('fathom', 'ft', 6) 
     linear('rd', 'yd', 5.5) # rod
@@ -183,8 +181,8 @@ def define_ridiculous_units():
     
     >>> define_units()
     >>> from units.quantity import Quantity
-    >>> Quantity(1, Unit('keg')) / Quantity(1, Unit('beers'))
-    140.84507
+    >>> Quantity(1, Unit('keg')) / Quantity(1, Unit('bottle'))
+    140.8450704225352
     """
     
     linear('firkin', 'lb', 90)
@@ -201,33 +199,7 @@ def define_ridiculous_units():
     NamedComposedUnit('flop', Unit('operation') / Unit('s'), is_si=True)
     linear('B', 'bit', 8, is_si=True)  # byte
     
+    linear('bottle', 'mL', 355)
+    linear('keg', 'L', 50)    
 
-    NamedComposedUnit('beers', 
-                      Unit('beer') * ComposedUnit([Unit('mL')], [], 355))
-                      
-    NamedComposedUnit('keg',
-                      Unit('beer') * ComposedUnit([Unit('L')], [], 50))
-    
-    
-    
-def name(symbol, 
-         numer, 
-         denom, 
-         multiplier=1, 
-         is_si=True):
-    """Shortcut to create and return a new named unit."""
-    return NamedComposedUnit(symbol,
-            ComposedUnit([Unit(x) for x in numer], 
-                         [Unit(x) for x in denom],
-                         multiplier), 
-            is_si)
-
-def linear(new_symbol, base_symbol, multiplier, is_si=False):
-    """Shortcut to create and return a new unit that is 
-    a linear multiplication of another."""
-    return NamedComposedUnit(new_symbol,
-            ComposedUnit([Unit(base_symbol)],
-                         [],
-                         multiplier),
-            is_si)
         

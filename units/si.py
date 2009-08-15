@@ -1,9 +1,7 @@
 """SI units can take PREFIXES which imply a multiplier. The si module
 encodes logic to handle these PREFIXES and create SI units."""
 
-import units
-from units.composed_unit import ComposedUnit
-from units.named_composed_unit import NamedComposedUnit
+from units.registry import REGISTRY
 
 PREFIXES = {
     'Y' : 10 ** 24,
@@ -55,14 +53,8 @@ def without_prefix(unit_str):
 
 def can_make(unit_str):
     """True if the given unit string represents an SI unit."""
-    return (prefixed(unit_str) and 
-            units.Unit(without_prefix(unit_str)).si)
-        
-
-def make(unit_str):
-    """Create a unit object from the given SI-unit string."""
-    assert can_make(unit_str)
-    return NamedComposedUnit(unit_str,
-            ComposedUnit([units.Unit(without_prefix(unit_str))],
-                          [],
-                          multiplier(unit_str)))
+    if prefixed(unit_str):
+        unit = REGISTRY.get(without_prefix(unit_str), None)
+        if unit:
+            return unit.si
+    return False

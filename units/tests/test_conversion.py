@@ -3,6 +3,7 @@
 from units import Unit
 from units.predefined import define_units
 from units.quantity import Quantity
+from units.registry import REGISTRY
 
 def test_valid_named_to_basic():
     """Named units should convert to their basic equivalents"""
@@ -14,5 +15,4 @@ def test_valid_named_to_basic():
     assert one_km_in_m == Quantity(1000, Unit('m'))
     assert one_km_in_m.unit == Unit('m')
 
-Unit.Registry.clear()
-assert len(Unit.Registry) == 0
+REGISTRY.clear()

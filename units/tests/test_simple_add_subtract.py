@@ -6,13 +6,13 @@ try:
 except ImportError:
     pass
 from units import Unit
+from units.compatibility import within_epsilon
 from units.composed_unit import ComposedUnit
+from units.exception import IncompatibleUnitsException
 from units.named_composed_unit import NamedComposedUnit
 from units.predefined import define_units
 from units.quantity import Quantity
-from units.exception import IncompatibleUnitsException
-
-define_units()
+from units.registry import REGISTRY
 
 def test_good_simple_add():
     """Two quantities with the same unit should add together."""
@@ -138,12 +138,12 @@ def test_good_add_w_mults():
     km_on_left = Quantity(1, kilometre) + Quantity(1, mile)
     manual_sum = Quantity(2609.344, Unit('m'))
             
-    assert m_on_left == km_on_left
-    assert km_on_left == m_on_left
-    assert manual_sum == m_on_left
-    assert manual_sum == km_on_left
-    assert m_on_left == manual_sum
-    assert km_on_left == manual_sum
+    assert within_epsilon(m_on_left, km_on_left)
+    assert within_epsilon(km_on_left, m_on_left)
+    assert within_epsilon(manual_sum, m_on_left)
+    assert within_epsilon(manual_sum, km_on_left)
+    assert within_epsilon(m_on_left, manual_sum)
+    assert within_epsilon(km_on_left, manual_sum)
     
 def test_good_named_add_w_mults():
     """Two quantities with compatible but differently-named and 
@@ -152,9 +152,13 @@ def test_good_named_add_w_mults():
     mile = Unit('mi')
     kilometre = Unit('km')
     
-    assert(Quantity(1, mile) + Quantity(1, kilometre) ==
-           Quantity(1, kilometre) + Quantity(1, mile) ==
-           Quantity(2609.344, Unit('m')))    
+    assert within_epsilon(Quantity(1, mile) + Quantity(1, kilometre),
+                          Quantity(1, kilometre) + Quantity(1, mile))
+    assert within_epsilon(Quantity(2609.344, Unit('m')),
+                          Quantity(1, kilometre) + Quantity(1, mile))
+    
+
+               
     
 def test_good_named_add_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
@@ -163,9 +167,10 @@ def test_good_named_add_w_mult():
     mile = Unit('mi').composed_unit
     kilometre = Unit('km')
                                                
-    assert(Quantity(1, mile) + Quantity(1, kilometre) ==
-           Quantity(1, kilometre) + Quantity(1, mile) ==
-           Quantity(2609.344, Unit('m')))
+    assert within_epsilon(Quantity(1, mile) + Quantity(1, kilometre), 
+                          Quantity(1, kilometre) + Quantity(1, mile))
+    assert within_epsilon(Quantity(2609.344, Unit('m')),
+                          Quantity(1, kilometre) + Quantity(1, mile))
            
 def test_good_composed_sub():
     """Two quantities with the same complex units should sub together"""
@@ -239,22 +244,22 @@ def test_good_sub_w_mults():
     m_on_left_diff = Quantity(609.344, Unit('m'))
     km_on_left_diff = Quantity(-609.344, Unit('m'))
             
-    assert m_on_left == m_on_left_diff
-    assert km_on_left == km_on_left_diff
-    assert m_on_left_diff == -km_on_left_diff
+    assert within_epsilon(m_on_left, m_on_left_diff)
+    assert within_epsilon(km_on_left, km_on_left_diff)
+    assert within_epsilon(m_on_left_diff, -km_on_left_diff)
 
 def test_good_named_sub_w_mults():
     """Two quantities with compatible but differently-named and 
     differently-multiplied units should sub together."""
-    
+
     mile = Unit('mi')
     kilometre = Unit('km')
     
-    assert(Quantity(1, mile) - Quantity(1, kilometre) ==
-           Quantity(609.344, Unit('m')))
+    assert within_epsilon(Quantity(1, mile) - Quantity(1, kilometre),
+                          Quantity(609.344, Unit('m')))
            
-    assert(Quantity(1, kilometre) - Quantity(1, mile) ==
-           Quantity(-609.344, Unit('m')))    
+    assert within_epsilon(Quantity(1, kilometre) - Quantity(1, mile),
+                          Quantity(-609.344, Unit('m')))
     
 def test_good_named_sub_w_mult():
     """A quantity with a named composed unit that carries a multiplier 
@@ -263,11 +268,14 @@ def test_good_named_sub_w_mult():
     mile = Unit('mi').composed_unit
     kilometre = Unit('km')
                                                
-    assert(Quantity(1, mile) - Quantity(1, kilometre) ==
-           Quantity(609.344, Unit('m')))
+    assert within_epsilon(Quantity(1, mile) - Quantity(1, kilometre),
+                          Quantity(609.344, Unit('m')))
            
-    assert(Quantity(1, kilometre) - Quantity(1, mile) ==
-           Quantity(-609.344, Unit('m')))    
-           
-Unit.Registry.clear()
-assert len(Unit.Registry) == 0
+    assert within_epsilon(Quantity(1, kilometre) - Quantity(1, mile),
+                          Quantity(-609.344, Unit('m')))
+
+def setup_module(mod):
+    define_units()
+
+def teardown_module(mod):
+    REGISTRY.clear()

@@ -4,4 +4,5 @@
   * In general, python objects that refer to quantities should play nicely with this module...
 * the __round__ protocol seems to be py3k only...
 * Instead of hasattr'ing parameters and using asserts to determine whether we can convert units or not, we could instead just do the conversion we want to do, raising a NotImplemented upon failure.
-
+* Generalize beyond string specifications
+* better within_epsilon that takes into account magnitude of its parameters

@@ -1,10 +1,10 @@
 """Leaf units stand alone. 
 They are not compatible with any other kind of unit."""
 
-from units import Unit
 from units.compatibility import compatible
 from units.exception import IncompatibleUnitsException
 from units.quantity import Quantity
+from units.registry import REGISTRY
 from units.composed_unit import ComposedUnit
     
 class LeafUnit(object):
@@ -16,33 +16,33 @@ class LeafUnit(object):
         return self._si
     si = property(is_si)
     
-    def get_unit_str(self):
+    def get_specifier(self):
         """Return the symbol of the unit."""
-        return self._unit_str
-    unit_str = property(get_unit_str)
+        return self._specifier
+    specifier = property(get_specifier)
         
-    def __new__(cls, symbol, is_si):
-        """Make a new LeafUnit with the given unit symbol and SI-compatibility.
-        A unit that is SI compatible can be prefixed e.g. with k to mean 1000x.
-
-        >> make('m', is_si=True)
-        LeafUnit(('m', True)
-        >> make('mi', is_si=False)
-        LeafUnit(('mi', False)
-
+        
+    def __new__(cls, specifier, is_si):
+        if specifier not in REGISTRY:
+            REGISTRY[specifier] = super(LeafUnit, cls).__new__(cls)
+        return REGISTRY[specifier]
+        
+    def __init__(self, specifier, is_si):
+        """Make a new LeafUnit with the given unit specifier and 
+        SI-compatibility. A unit that is SI compatible can be prefixed, 
+        e.g. with k to mean 1000x.
         """
-        if symbol not in Unit.Registry:
-            Unit.Registry[symbol] = super(LeafUnit, cls).__new__(cls)
-
-        return Unit.Registry[symbol]
-        
-    def __init__(self, unit_str, is_si):
-        self._unit_str = unit_str.strip()
+        self._specifier = specifier
         self._si = is_si
               
-    __str__ = get_unit_str
-    __repr__ = __str__
-    
+    __str__ = get_specifier
+
+    def __repr__(self):
+        return ("LeafUnit(" + 
+                ", ".join([repr(x) for x in [self.specifier,
+                                             self.si]]) + 
+                ")")
+
     def __mul__(self, other):
         if hasattr(other, "numer"):
             return other * self
