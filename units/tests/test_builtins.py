@@ -58,5 +58,9 @@ def test_pow():
     assert within_epsilon(cm_quant ** 2, pow(cm_quant, 2))
 
 
-REGISTRY.clear()
+def teardown_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called after running all of the tests here."""
+    REGISTRY.clear()
 

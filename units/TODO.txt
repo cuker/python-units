@@ -6,3 +6,10 @@
 * Instead of hasattr'ing parameters and using asserts to determine whether we can convert units or not, we could instead just do the conversion we want to do, raising a NotImplemented upon failure.
 * Generalize beyond string specifications
 * better within_epsilon that takes into account magnitude of its parameters
+* py3k port/compatibility
+* test cases for repr and str
+* test cases for conversions
+* test coverage to 100%
+* PyPI / pip / easy_install
+* Use polymorphism to get rid of the hasattrs that effectively switch on the type of the unit
+* Get rid of the rest of the hasattrs

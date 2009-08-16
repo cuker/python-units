@@ -12,4 +12,8 @@ def test_unbox_to_leaf():
     """Test that composed units collaple properly to leaf units."""
     assert ComposedUnit([unit('m')], []) == unit('m')
     
-REGISTRY.clear()
+def teardown_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called after running all of the tests here."""
+    REGISTRY.clear()

@@ -160,4 +160,8 @@ def pytest_generate_tests(metafunc):
                 metafunc.addcall(funcargs=dict(quant1=q_group1[0],
                                                quant2=q_group2[0]))
 
-REGISTRY.clear()
+def teardown_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called after running all of the tests here."""
+    REGISTRY.clear()

@@ -15,4 +15,8 @@ def test_valid_named_to_basic():
     assert one_km_in_m == Quantity(1000, unit('m'))
     assert one_km_in_m.unit == unit('m')
 
-REGISTRY.clear()
+def teardown_module(module):
+    # Disable warning about not using module.
+    # pylint: disable-msg=W0613
+    """Called after running all of the tests here."""
+    REGISTRY.clear()
