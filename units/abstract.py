@@ -13,7 +13,10 @@ class AbstractUnit(object):
     def __call__(self, quantity):
         """Overload the function call operator to convert units."""
         if compatible(self, quantity.unit):
-            return Quantity(quantity.num * quantity.unit.squeeze(), self)
+            return Quantity(quantity.num * 
+                            quantity.unit.squeeze() / 
+                            self.squeeze(), 
+                            self)
         else:
             raise IncompatibleUnitsException()
 
