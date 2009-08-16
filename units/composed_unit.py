@@ -114,10 +114,10 @@ class ComposedUnit(AbstractUnit):
                  
     def __str__(self):
         if self.denom:
-            return (('*'.join([str(x) for x in self.numer]) or '1') + " / "
-                    + '*'.join([str(x) for x in self.denom]))
+            return ((' * '.join([str(x) for x in self.numer]) or '1') + " / "
+                    + ' * '.join([str(x) for x in self.denom]))
         else:
-            return '*'.join([str(x) for x in self.numer])
+            return ' * '.join([str(x) for x in self.numer])
 
     def __repr__(self):
         return ("ComposedUnit(" + 

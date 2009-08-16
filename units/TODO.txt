@@ -7,7 +7,6 @@
 * Generalize beyond string specifications
 * better within_epsilon that takes into account magnitude of its parameters
 * py3k port/compatibility
-* test cases for repr and str
 * test cases for conversions
 * test coverage to 100%
 * PyPI / pip / easy_install
