@@ -59,7 +59,8 @@ class Quantity(object):
             if hasattr(new_unit, "squeeze"):
                 return Quantity(self.num * other.num, new_unit)
             else:
-                return self.num * new_unit
+                # The unit multiplication unboxed
+                return self.num * other.num * new_unit
             
         else:
             return Quantity(self.num * other, self.unit)
@@ -73,7 +74,8 @@ class Quantity(object):
             if hasattr(new_unit, "squeeze"):
                 return Quantity(self.num / other.num, new_unit)
             else:
-                return self.num * new_unit
+                # The unit division unboxed
+                return self.num / other.num * new_unit
             
         else:
             return Quantity(self.num / other, self.unit)

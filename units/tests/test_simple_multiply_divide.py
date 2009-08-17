@@ -113,6 +113,16 @@ def test_rdivide_named_scalar():
     assert (4 / Quantity(2, m_per_s) ==
             Quantity(2, unit('s') / unit('m')))
 
+def test_unboxing_multiply():
+    """Multiplication causing an unboxing to number"""
+    m_per_s = unit('m') / unit('s')
+    s_per_m = unit('s') / unit('m')
+    assert m_per_s(5) * s_per_m(5) == 25
+    
+def test_unboxing_divide():
+    """Division causing an unboxing to number"""
+    metre = unit('m')
+    assert metre(10) / metre(5) == 2
 
 def teardown_module(module):
     # Disable warning about not using module.
