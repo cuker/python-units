@@ -1,6 +1,6 @@
-pypy
 build
 html
+^unitPython/pypy
 ^dist
 ^MANIFEST$
 \.pyc$

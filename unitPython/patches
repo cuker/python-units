@@ -1,0 +1,115 @@
+Index: pypy/interpreter/pyparser/astbuilder.py
+===================================================================
+--- pypy/interpreter/pyparser/astbuilder.py	(revision 66797)
++++ pypy/interpreter/pyparser/astbuilder.py	(working copy)
+@@ -41,6 +41,28 @@
+ ## main reason why build_* functions are not methods of the AstBuilder class
+ ##
+ 
++
++def build_quantity(builder, nb):
++    atoms = get_atoms(builder, nb)
++    
++    num = ast.Const(builder.eval_number(atoms[0].get_value()), atoms[0].lineno)
++    
++    for i in range(1, len(atoms), 2):
++        atoms[i] = reduce_callfunc(ast.Name('Unit'), ArglistObject([ast.Const(builder.space.wrap(atoms[i].get_value()), atoms[i].lineno)], None, None, num.lineno))
++        
++    left = atoms[1]
++    for i in range(3,len(atoms),2):
++        op_node = atoms[i-1]
++        right = atoms[i]
++        assert isinstance(op_node, TokenObject)
++        if op_node.name == builder.parser.tokens['STAR']:
++            left = ast.Mul( left, right, left.lineno )
++        elif op_node.name == builder.parser.tokens['SLASH']:
++            left = ast.Div( left, right, left.lineno )
++    
++    result = reduce_callfunc(ast.Name('Quantity'), ArglistObject([num, left], None, None, num.lineno))
++    builder.push(result)
++    
+ def build_atom(builder, nb):
+     atoms = get_atoms(builder, nb)
+     top = atoms[0]
+@@ -50,7 +72,7 @@
+             if len(atoms) == 2:
+                 builder.push(ast.Tuple([], top.lineno))
+             else:
+-                builder.push( atoms[1] )
++                builder.push( atoms[1] )            
+         elif top.name == builder.parser.tokens['LSQB']:
+             if len(atoms) == 2:
+                 builder.push(ast.List([], top.lineno))
+@@ -90,6 +112,8 @@
+             builder.push(ast.Backquote(atoms[1], atoms[1].lineno))
+         else:
+             raise SyntaxError("unexpected tokens", top.lineno, top.col)
++    else:
++        builder.push(top)
+ 
+ def slicecut(lst, first, endskip): # endskip is negative
+     last = len(lst)+endskip
+@@ -1086,6 +1110,7 @@
+     'decorator' : build_decorator,
+     'eval_input' : build_eval_input,
+     'with_stmt' : build_with_stmt,
++    'quantity'  : build_quantity,
+     }
+ 
+ 
+Index: pypy/interpreter/pyparser/symbol.py
+===================================================================
+--- pypy/interpreter/pyparser/symbol.py	(revision 66797)
++++ pypy/interpreter/pyparser/symbol.py	(working copy)
+@@ -82,6 +82,7 @@
+ gen_if = 331
+ testlist1 = 332
+ encoding_decl = 333
++quantity = 334
+ 
+ 
+ # Generate sym_name
+Index: pypy/interpreter/pyparser/data/Grammar2.5
+===================================================================
+--- pypy/interpreter/pyparser/data/Grammar2.5	(revision 66797)
++++ pypy/interpreter/pyparser/data/Grammar2.5	(working copy)
+@@ -116,7 +116,10 @@
+        '[' [listmaker] ']' |
+        '{' [dictmaker] '}' |
+        '`' testlist1 '`' |
++       quantity | 
+        NAME | NUMBER | STRING+)
++quantity: NUMBER (NAME ( ('*' | '/' ) NAME )*)
++
+ listmaker: test ( list_for | (',' test)* [','] )
+ testlist_gexp: test ( gen_for | (',' test)* [','] )
+ lambdef: 'lambda' [varargslist] ':' test
+Index: lib-python/modified-2.5.2/site.py
+===================================================================
+--- lib-python/modified-2.5.2/site.py	(revision 66797)
++++ lib-python/modified-2.5.2/site.py	(working copy)
+@@ -62,6 +62,14 @@
+ import os
+ import __builtin__
+ 
++import units
++import units.quantity
++
++def load_units():
++    __builtin__.Unit = units.unit
++    __builtin__.Quantity = units.quantity.Quantity
++    
++
+ def makepath(*paths):
+     dir = os.path.abspath(os.path.join(*paths))
+     return dir, os.path.normcase(dir)
+@@ -392,6 +400,9 @@
+     aliasmbcs()
+     setencoding()
+     execsitecustomize()
++    
++    load_units()
++    
+     # Remove sys.setdefaultencoding() so that users cannot change the
+     # encoding after initialization.  The test for presence is needed when
+     # this module is run as a script, because this code is executed twice.
