@@ -20,6 +20,8 @@ def define_units():
     define_time_units()
     define_volumes()
     define_imperial_units()
+    define_astronomical_units()
+    define_computer_units()
     define_ridiculous_units()
 
 def define_base_si_units():
@@ -174,10 +176,30 @@ def define_imperial_units():
     # energy
     scaled_unit('BTU', 'J', 1055.056, is_si=True) # ISO BTU
 
+def define_astronomical_units():
+    """Define some astronomical units."""
+    scaled_unit('ly', 'm', 9460730472580800) # light-year
+    scaled_unit('AU', 'm', 149597870691) # Astronomical unit
+    scaled_unit('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
+    
+def define_computer_units():
+    """Define some units for technology.
+    
+    >>> define_units()
+    >>> unit('GiB')(200) > unit('GB')(200) # bastard marketers
+    True
+    """
+
+    NamedComposedUnit('flop', unit('operation') / unit('s'), is_si=True)
+    scaled_unit('B', 'bit', 8, is_si=True)  # byte
+    scaled_unit('KiB', 'B', 1024)
+    scaled_unit('MiB', 'KiB', 1024)
+    scaled_unit('GiB', 'MiB', 1024)
+    scaled_unit('TiB', 'GiB', 1024)
+    scaled_unit('PiB', 'TiB', 1024)
 
 def define_ridiculous_units():
     """Define some silly units.
-    
     
     >>> define_units()
     >>> from units.quantity import Quantity
@@ -188,17 +210,10 @@ def define_ridiculous_units():
     scaled_unit('firkin', 'lb', 90)
     scaled_unit('fortnight', 'day', 14)
     
-    scaled_unit('ly', 'm', 9460730472580800) # light-year
-    scaled_unit('AU', 'm', 149597870691) # Astronomical unit
-    scaled_unit('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
-
     scaled_unit('smoot', 'cm', 170)
     
     scaled_unit('hiroshima', 'J', 6.3 * 10 ** 13)
-    
-    NamedComposedUnit('flop', unit('operation') / unit('s'), is_si=True)
-    scaled_unit('B', 'bit', 8, is_si=True)  # byte
-    
+        
     scaled_unit('bottle', 'mL', 355)
     scaled_unit('keg', 'L', 50)    
 
