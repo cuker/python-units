@@ -9,7 +9,7 @@ except ImportError: pass
 from units import unit
 from units.compatibility import within_epsilon
 from units.composed_unit import ComposedUnit
-from units.exception import IncompatibleUnitsException
+from units.exception import IncompatibleUnitsError
 from units.named_composed_unit import NamedComposedUnit
 from units.predefined import define_units
 from units.quantity import Quantity
@@ -31,7 +31,7 @@ def add_bad():
     
 def test_bad_simple_add():
     """Two quantities with different units should not add together."""
-    py.test.raises(IncompatibleUnitsException, add_bad)
+    py.test.raises(IncompatibleUnitsError, add_bad)
 
 def test_good_simple_sub():
     """Should be able to subtract compatible Quantities."""
@@ -49,7 +49,7 @@ def subtract_bad():
     
 def test_bad_simple_sub():
     """Two quantities with different units should not allow subtraction."""
-    py.test.raises(IncompatibleUnitsException, subtract_bad)
+    py.test.raises(IncompatibleUnitsError, subtract_bad)
 
 def test_good_composed_add():
     """Two quantities with the same complex units should add together"""

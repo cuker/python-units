@@ -1,7 +1,7 @@
 """An abstract base class to define the interface for all units."""
 
 from units.compatibility import compatible
-from units.exception import IncompatibleUnitsException
+from units.exception import IncompatibleUnitsError
 from units.quantity import Quantity
 
 class AbstractUnit(object):
@@ -20,7 +20,7 @@ class AbstractUnit(object):
                             self.squeeze(), 
                             self)
         else:
-            raise IncompatibleUnitsException()
+            raise IncompatibleUnitsError()
 
     def canonical(self):
         """Return an immutable, comparable derivative of this unit"""

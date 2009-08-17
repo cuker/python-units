@@ -22,7 +22,7 @@ except ImportError: pass
 
 from units import unit
 from units.composed_unit import ComposedUnit
-from units.exception import IncompatibleUnitsException
+from units.exception import IncompatibleUnitsError
 from units.named_composed_unit import NamedComposedUnit
 from units.quantity import Quantity
 from units.registry import REGISTRY
@@ -96,22 +96,22 @@ def test_ne(quant1, quant2):
 
 def test_invalid_lt(quant1, quant2):
     """Binary function to assert the operator's exception"""
-    py.test.raises(IncompatibleUnitsException, less_than, quant1, quant2)
+    py.test.raises(IncompatibleUnitsError, less_than, quant1, quant2)
 
 def test_invalid_lte(quant1, quant2):
     """Binary function to assert the operator's exception"""
-    py.test.raises(IncompatibleUnitsException, less_than_or_eq, quant1, quant2)
+    py.test.raises(IncompatibleUnitsError, less_than_or_eq, quant1, quant2)
 
 def test_invalid_gte(quant1, quant2):
     """Binary function to assert the operator's exception"""
-    py.test.raises(IncompatibleUnitsException, 
+    py.test.raises(IncompatibleUnitsError, 
                    greater_than_or_eq, 
                    quant1, 
                    quant2)
 
 def test_invalid_gt(quant1, quant2):
     """Binary function to assert the operator's exception"""
-    py.test.raises(IncompatibleUnitsException, greater_than, quant1, quant2)
+    py.test.raises(IncompatibleUnitsError, greater_than, quant1, quant2)
 
 def test_invalid_eq(quant1, quant2):
     """Binary function to assert no exception raised."""

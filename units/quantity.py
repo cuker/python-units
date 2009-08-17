@@ -3,7 +3,7 @@ The combination of quantities is dependent on the compatibilities
 of their units."""
 
 from units.compatibility import compatible
-from units.exception import IncompatibleUnitsException
+from units.exception import IncompatibleUnitsError
 
 class Quantity(object):
     """A number with a unit attached."""
@@ -30,7 +30,7 @@ class Quantity(object):
     def _ensure_same_type(self, other):
         """docstring for ensure_same_type"""
         if not compatible(self.unit, other.unit):
-            raise IncompatibleUnitsException()
+            raise IncompatibleUnitsError()
 
     def __abs__(self):
         """Absolute value of a quantity."""

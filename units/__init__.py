@@ -30,11 +30,11 @@ def unit(specifier):
     if specifier in REGISTRY:
         return REGISTRY[specifier]
     if units.si.can_make(specifier):
-        return make_si(specifier)
+        return si_prefixed_unit(specifier)
     else:
         return LeafUnit(specifier, is_si=False)
 
-def name(symbol, 
+def named_unit(symbol, 
          numer, 
          denom, 
          multiplier=1, 
@@ -50,19 +50,19 @@ def name(symbol,
                          multiplier), 
             is_si)
 
-def linear(new_symbol, base_symbol, multiplier, is_si=False):
+def scaled_unit(new_symbol, base_symbol, multiplier, is_si=False):
     """Shortcut to create and return a new unit that is 
-    a linear multiplication of another."""
+    a scaled_unit multiplication of another."""
     return NamedComposedUnit(new_symbol, 
                              ComposedUnit([unit(base_symbol)], 
                                           [], 
                                           multiplier), 
                              is_si)
 
-def make_si(unit_str):
+def si_prefixed_unit(unit_str):
     """Create a unit object from the given SI-unit string."""
     assert units.si.can_make(unit_str)
-    return linear(unit_str, 
+    return scaled_unit(unit_str, 
                   units.si.without_prefix(unit_str), 
                   units.si.multiplier(unit_str))
 

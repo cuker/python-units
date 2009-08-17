@@ -7,7 +7,6 @@
 * Generalize beyond string specifications
 * better within_epsilon that takes into account magnitude of its parameters
 * py3k port/compatibility
-* test cases for conversions
 * test coverage to 100%... but Figleaf's output cannot be trusted.
 * Use polymorphism to get rid of the hasattrs that effectively switch on the type of the unit
 * Get rid of the rest of the hasattrs

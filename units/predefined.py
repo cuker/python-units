@@ -2,7 +2,7 @@
 from units.composed_unit import ComposedUnit
 from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
-from units import unit, name, linear
+from units import unit, named_unit, scaled_unit
 
 def define_units():
     """Define built-in units.
@@ -33,7 +33,7 @@ def define_base_si_units():
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
         LeafUnit(sym, is_si=True)
     
-    linear('tonne', 'kg', 1000) # == 1Mg. 
+    scaled_unit('tonne', 'kg', 1000) # == 1Mg. 
 
 def define_complex_si_units():
     """Define SI units that are built on other SI units.
@@ -45,25 +45,25 @@ def define_complex_si_units():
     for sym in ["rad", "sr"]:  
         LeafUnit(sym, is_si=True)
 
-    name("Hz", [], ["s"]) #hertz
-    name("N", ["m", "kg"], ["s", "s"]) #Newton
-    name("Pa", ["N"], ["m", "m"]) #pascal
-    name("J", ["N", "m"], []) #Joule # Dangerous unit, 3J gives a complex number
-    name("W", ["J"], ["s"]) # Watt
-    name("C", ["s", "A"], []) # Coulomb
-    name("V", ["W"], ["A"]) # Volt
-    name("F", ["C"], ["V"]) # Farad
-    name("Ohm", ["V"], ["A"]) 
-    name("S", ["A"], ["V"])   #Siemens
-    name("Wb", ["V", "s"], []) # Weber
-    name("T", ["Wb"], ["m", "m"]) # Tesla
-    name("H", ["Wb"], ["A"]) # Henry
-    name("lm", ["cd", "sr"], []) # lumen 
-    name("lx", ["lm"], ["m", "m"]) #lux
-    name("Bq", [], ["s"]) # Becquerel
-    name("Gy", ["J"], ["kg"]) # Gray
-    name("Sv", ["J"], ["kg"]) # Sievert
-    name("kat", ["mol"], ["s"]) # Katal
+    named_unit("Hz", [], ["s"]) #hertz
+    named_unit("N", ["m", "kg"], ["s", "s"]) #Newton
+    named_unit("Pa", ["N"], ["m", "m"]) #pascal
+    named_unit("J", ["N", "m"], []) #Joule # Dangerous, 3J is a complex number
+    named_unit("W", ["J"], ["s"]) # Watt
+    named_unit("C", ["s", "A"], []) # Coulomb
+    named_unit("V", ["W"], ["A"]) # Volt
+    named_unit("F", ["C"], ["V"]) # Farad
+    named_unit("Ohm", ["V"], ["A"]) 
+    named_unit("S", ["A"], ["V"])   #Siemens
+    named_unit("Wb", ["V", "s"], []) # Weber
+    named_unit("T", ["Wb"], ["m", "m"]) # Tesla
+    named_unit("H", ["Wb"], ["A"]) # Henry
+    named_unit("lm", ["cd", "sr"], []) # lumen 
+    named_unit("lx", ["lm"], ["m", "m"]) #lux
+    named_unit("Bq", [], ["s"]) # Becquerel
+    named_unit("Gy", ["J"], ["kg"]) # Gray
+    named_unit("Sv", ["J"], ["kg"]) # Sievert
+    named_unit("kat", ["mol"], ["s"]) # Katal
     
 def define_time_units():
     """Define some common time units.
@@ -86,10 +86,10 @@ def define_time_units():
     """
     assert unit('s').is_si() # Ensure SI units already defined.
     
-    linear('min', 's', 60.)
-    linear('h', 'min', 60.)
-    linear('day', 'h', 24.)
-    linear('wk', 'day', 7.)
+    scaled_unit('min', 's', 60.)
+    scaled_unit('h', 'min', 60.)
+    scaled_unit('day', 'h', 24.)
+    scaled_unit('wk', 'day', 7.)
     
 def define_volumes():
     """Define some common kitchen volumes.
@@ -106,32 +106,32 @@ def define_volumes():
     assert unit('m').is_si()
     NamedComposedUnit("L", unit("cm") ** 3, is_si=True)     
     
-    linear('tsp', 'mL', 5)
-    linear('tbsp', 'mL', 15)
-    linear('cups', 'mL', 240)
+    scaled_unit('tsp', 'mL', 5)
+    scaled_unit('tbsp', 'mL', 15)
+    scaled_unit('cups', 'mL', 240)
     
 def define_imperial_units():
     """Define some common imperial units."""
     
     assert unit('m').is_si() # Ensure SI units already defined
     
-    # linear measures
-    linear('inch', 'cm', 2.54) # 'in' is a python keyword
-    linear('ft', 'inch', 12) # foot
-    linear('yd', 'ft', 3) # yard
-    linear('fathom', 'ft', 6) 
-    linear('rd', 'yd', 5.5) # rod
-    linear('fur', 'rd', 40) # furlong
-    linear('mi', 'fur', 8) # mile
-    linear('league', 'mi', 3)
+    # scaled_unit measures
+    scaled_unit('inch', 'cm', 2.54) # 'in' is a python keyword
+    scaled_unit('ft', 'inch', 12) # foot
+    scaled_unit('yd', 'ft', 3) # yard
+    scaled_unit('fathom', 'ft', 6) 
+    scaled_unit('rd', 'yd', 5.5) # rod
+    scaled_unit('fur', 'rd', 40) # furlong
+    scaled_unit('mi', 'fur', 8) # mile
+    scaled_unit('league', 'mi', 3)
 
-    # nautical linear measures
-    linear('NM', 'm', 1852) # Nautical mile
-    linear('cable', 'NM', 0.1)
+    # nautical scaled_unit measures
+    scaled_unit('NM', 'm', 1852) # Nautical mile
+    scaled_unit('cable', 'NM', 0.1)
     
     # chain measure
-    linear('li', 'inch', 7.92) # link
-    linear('ch', 'li', 100) # chain
+    scaled_unit('li', 'inch', 7.92) # link
+    scaled_unit('ch', 'li', 100) # chain
     
     # area measure
     NamedComposedUnit('acre',
@@ -145,34 +145,34 @@ def define_imperial_units():
                                    [],
                                    28.875)) # pint
     
-    linear('gi', 'pt', 0.25) # gills
-    linear('qt', 'pt', 2) # quarts
-    linear('gal', 'qt', 4) # gallons
+    scaled_unit('gi', 'pt', 0.25) # gills
+    scaled_unit('qt', 'pt', 2) # quarts
+    scaled_unit('gal', 'qt', 4) # gallons
 
-    linear('fl oz', 'pt', 1.0 / 16)
-    linear('fl dr', 'fl oz', 1.0 / 8)
-    linear('minim', 'fl dr', 1.0 / 60)
+    scaled_unit('fl oz', 'pt', 1.0 / 16)
+    scaled_unit('fl dr', 'fl oz', 1.0 / 8)
+    scaled_unit('minim', 'fl dr', 1.0 / 60)
     
     # weight
     
-    linear('oz', 'g', 28.375)
-    linear('lb', 'oz', 16)
-    linear('ton', 'lb', 2000)
-    linear('grain', 'lb', 1.0 / 7000)
-    linear('dr', 'lb', 1.0 / 256) # dram
-    linear('cwt', 'lb', 100) # hundredweight
+    scaled_unit('oz', 'g', 28.375)
+    scaled_unit('lb', 'oz', 16)
+    scaled_unit('ton', 'lb', 2000)
+    scaled_unit('grain', 'lb', 1.0 / 7000)
+    scaled_unit('dr', 'lb', 1.0 / 256) # dram
+    scaled_unit('cwt', 'lb', 100) # hundredweight
     
-    linear('dwt', 'grain', 24) # pennyweight
-    linear('oz t', 'dwt', 20) # ounce troy
-    linear('lb t', 'oz t', 12) # pound troy
+    scaled_unit('dwt', 'grain', 24) # pennyweight
+    scaled_unit('oz t', 'dwt', 20) # ounce troy
+    scaled_unit('lb t', 'oz t', 12) # pound troy
     
     # power
-    linear('hpl', 'W', 746.9999) # mechanical
-    linear('hpm', 'W', 735.49875) # metric horsepower
-    linear('hpe', 'W', 746) # electric horsepower.
+    scaled_unit('hpl', 'W', 746.9999) # mechanical
+    scaled_unit('hpm', 'W', 735.49875) # metric horsepower
+    scaled_unit('hpe', 'W', 746) # electric horsepower.
     
     # energy
-    linear('BTU', 'J', 1055.056, is_si=True) # ISO BTU
+    scaled_unit('BTU', 'J', 1055.056, is_si=True) # ISO BTU
 
 
 def define_ridiculous_units():
@@ -185,21 +185,21 @@ def define_ridiculous_units():
     140.8450704225352
     """
     
-    linear('firkin', 'lb', 90)
-    linear('fortnight', 'day', 14)
+    scaled_unit('firkin', 'lb', 90)
+    scaled_unit('fortnight', 'day', 14)
     
-    linear('ly', 'm', 9460730472580800) # light-year
-    linear('AU', 'm', 149597870691) # Astronomical unit
-    linear('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
+    scaled_unit('ly', 'm', 9460730472580800) # light-year
+    scaled_unit('AU', 'm', 149597870691) # Astronomical unit
+    scaled_unit('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
 
-    linear('smoot', 'cm', 170)
+    scaled_unit('smoot', 'cm', 170)
     
-    linear('hiroshima', 'J', 6.3 * 10 ** 13)
+    scaled_unit('hiroshima', 'J', 6.3 * 10 ** 13)
     
     NamedComposedUnit('flop', unit('operation') / unit('s'), is_si=True)
-    linear('B', 'bit', 8, is_si=True)  # byte
+    scaled_unit('B', 'bit', 8, is_si=True)  # byte
     
-    linear('bottle', 'mL', 355)
-    linear('keg', 'L', 50)    
+    scaled_unit('bottle', 'mL', 355)
+    scaled_unit('keg', 'L', 50)    
 
         
