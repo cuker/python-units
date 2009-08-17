@@ -15,7 +15,40 @@ def test_valid_named_to_basic():
     assert one_km_in_m == Quantity(1000, unit('m'))
     assert one_km_in_m.unit == unit('m')
     assert str(one_km_in_m) == '1000 m'
+
+def test_valid_named_to_composed():
+    """Named units should convert to the composed equivalents."""
     
+    hertz = unit('Hz')
+    one_hz_in_per_second = hertz.composed_unit(Quantity(1, hertz))
+    
+    assert one_hz_in_per_second == Quantity(1, hertz)
+    assert str(one_hz_in_per_second) == '1 1 / s'
+    
+def test_valid_named_to_named():
+    """Named units should convert to named equivalents."""    
+
+    gray = unit('Gy')
+    sievert = unit('Sv')
+    
+    one_gray_in_sievert = sievert(Quantity(1, gray))
+    assert one_gray_in_sievert == Quantity(1, gray)
+    assert str(one_gray_in_sievert) == '1 Sv'
+
+def test_valid_basic_to_basic():
+    """Test idempotent conversion."""
+    metre = unit('m')
+    
+    assert metre(Quantity(1, metre)) == Quantity(1, metre)
+    
+def test_valid_basic_to_composed():
+    """Test conversion to composed units."""
+    composed_cm = unit('cm').composed_unit
+    
+    one_m_in_cm = composed_cm(Quantity(1, unit('m')))
+    
+    assert one_m_in_cm == Quantity(1, unit('m'))
+
 def test_valid_basic_to_named():
     """Basic units should convert into named equivalents."""
     metre = unit('m')
@@ -24,6 +57,14 @@ def test_valid_basic_to_named():
     assert thousand_m_in_km == Quantity(1, unit('km'))
     assert thousand_m_in_km.unit == unit('km')
     assert str(thousand_m_in_km) == '1 km'
+
+def test_valid_composed_to_basic():
+    """Composed units should convert to basic equivalents."""
+    metre = unit('m')
+    
+    hundred_cm_in_metres = metre(Quantity(100, unit('cm')))
+    assert hundred_cm_in_metres == Quantity(1.0, metre)
+    assert str(hundred_cm_in_metres) == '1.0 m'
     
 def test_valid_composed_to_composed():
     """Valid composed units in terms of others."""
@@ -36,12 +77,26 @@ def test_valid_composed_to_composed():
     assert str(highway_kph) == '100 km / h'
     assert str(highway_mph) == '62.1371192237 mi / h'
     
-    
     assert within_epsilon(imp_vel(highway_kph), 
                           highway_mph)
 
     assert str(imp_vel(highway_kph)) == '62.1371192237 mi / h'
+
+def test_valid_composed_to_named():
+    """Composed units should convert to named equivalents."""
+    hertz = unit('Hz')    
+    per_second = hertz.composed_unit
     
+    one_hz = hertz(Quantity(1, per_second))
+
+    assert one_hz == Quantity(1, hertz)
+    assert str(one_hz) == '1 Hz'    
+    
+def test_convert_from_num():
+    """Nums should convert into quantities."""
+    
+    metre = unit('m')
+    assert metre(3) == Quantity(3, metre)
     
 def setup_module(module):
     # Disable warning about not using module.

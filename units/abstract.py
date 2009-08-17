@@ -12,7 +12,9 @@ class AbstractUnit(object):
         
     def __call__(self, quantity):
         """Overload the function call operator to convert units."""
-        if compatible(self, quantity.unit):
+        if not hasattr(quantity, 'unit'):
+            return Quantity(quantity, self)
+        elif compatible(self, quantity.unit):
             return Quantity(quantity.num * 
                             quantity.unit.squeeze() / 
                             self.squeeze(), 
