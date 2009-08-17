@@ -22,14 +22,11 @@ class NamedComposedUnit(AbstractUnit):
                 composed_unit, 
                 is_si=False):
         """Give a composed unit a new symbol."""
+        # pylint: disable-msg=W0613
 
         if name not in REGISTRY:
             REGISTRY[name] = super(NamedComposedUnit, 
-                                   cls).__new__(cls,
-                                                name,
-                                                composed_unit,
-                                                is_si)
-
+                                   cls).__new__(cls)
         return REGISTRY[name]
         
     def __init__(self, name, composed_unit, is_si=False):
