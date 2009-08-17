@@ -8,7 +8,7 @@ invalid operations between incompatible quantities. For example, we cannot add
 """
 
 __author__    = 'Aran Donohue'
-__version__   = '0.00'
+__version__   = '0.01'
 __copyright__ = '2009'
 __license__   = 'Python Software Foundation License'
 __contact__   = 'aran@arandonohue.com'
