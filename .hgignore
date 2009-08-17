@@ -1,6 +1,8 @@
 pypy
 build
 html
+^dist
+^MANIFEST$
 \.pyc$
 \.figleaf
 \.DS_Store
