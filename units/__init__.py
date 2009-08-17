@@ -162,7 +162,7 @@ If you have a copy of units-enhanced Python, you can do::
 """
 
 __author__    = 'Aran Donohue'
-__version__   = '0.01'
+__version__   = '0.02'
 __copyright__ = '2009'
 __license__   = 'Python Software Foundation License'
 __contact__   = 'aran@arandonohue.com'
