@@ -106,7 +106,7 @@ def define_volumes():
     """
     # Dangerous unit, 3L gives a long int.
     assert unit('m').is_si()
-    NamedComposedUnit("L", unit("cm") ** 3, is_si=True)     
+    NamedComposedUnit("L", unit("dm") ** 3, is_si=True)     
     
     scaled_unit('tsp', 'mL', 5)
     scaled_unit('tbsp', 'mL', 15)

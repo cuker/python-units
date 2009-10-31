@@ -20,3 +20,5 @@ The intent is for this code to be released under the same license as
 Python itself. 
 
 Thanks to Andrew Trusty and Rory Tulk for advice and reviews.
+
+Thanks to Rob Mecham for a bug fix.

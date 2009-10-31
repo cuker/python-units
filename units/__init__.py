@@ -151,10 +151,15 @@ that can surprise you::
 Using Modified Python
 ---------------------
 
-If you have a copy of units-enhanced Python, you can do::
+In units-enhanced Python, you can do::
 
   print(2cm / 0.5 s)
   -> 4.0 cm / s
+
+Units-enhanced Python is a version of PyPy with built-in support
+for units. You can find it in the unitPython directory. Essentially,
+apply the supplied patches to r66797 of PyPy. If you're on a suitable
+UNIX, the included unitPython/unitPython.sh does this for you.
 
 @requires: U{Python<http://python.org/>} >= 2.5
 @since: 2009-Aug-10
@@ -162,7 +167,7 @@ If you have a copy of units-enhanced Python, you can do::
 """
 
 __author__    = 'Aran Donohue'
-__version__   = '0.02'
+__version__   = '0.03'
 __copyright__ = '2009'
 __license__   = 'Python Software Foundation License'
 __contact__   = 'aran@arandonohue.com'

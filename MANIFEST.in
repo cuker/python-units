@@ -2,4 +2,5 @@ include units/HACKING
 include units/TODO.txt
 include units/LICENSE
 include !--
-
+include unitPython/patches
+include unitPython/unitPython.sh
