@@ -1,5 +1,5 @@
-"""Quantities are numbers with units. 
-The combination of quantities is dependent on the compatibilities 
+"""Quantities are numbers with units.
+The combination of quantities is dependent on the compatibilities
 of their units."""
 
 from units.compatibility import compatible
@@ -16,7 +16,7 @@ class Quantity(object):
     
     def __init__(self, num, unit):
         self._num, self._unit = num, unit
-
+    
     def get_num(self):
         """The scalar number of this quantity"""
         return self._num
@@ -26,33 +26,27 @@ class Quantity(object):
         """The standalone unit of this quantity"""
         return self._unit
     unit = property(get_unit)
-
+    
     def _ensure_same_type(self, other):
         """docstring for ensure_same_type"""
         if not compatible(self.unit, other.unit):
             raise IncompatibleUnitsError()
-
+    
     def __abs__(self):
         """Absolute value of a quantity."""
         if self.num < 0:
             return -self
         else:
             return self
-
+    
     def __add__(self, other):
         self._ensure_same_type(other)
-        return Quantity(self.num + 
-                            ((other.num * other.unit.squeeze()) / 
-                                self.unit.squeeze()), 
-                        self.unit)
+        return Quantity(self.num + ((other.num * other.unit.squeeze()) / self.unit.squeeze()), self.unit)
     
     def __sub__(self, other):
         self._ensure_same_type(other)
-        return Quantity(self.num - 
-                            other.num * other.unit.squeeze() / 
-                                self.unit.squeeze(), 
-                        self.unit)    
-
+        return Quantity(self.num - other.num * other.unit.squeeze() / self.unit.squeeze(), self.unit)
+    
     def __mul__(self, other):
         if hasattr(other, 'num'):
             new_unit = self.unit * other.unit
@@ -61,7 +55,7 @@ class Quantity(object):
             else:
                 # The unit multiplication unboxed
                 return self.num * other.num * new_unit
-            
+        
         else:
             return Quantity(self.num * other, self.unit)
     
@@ -76,39 +70,38 @@ class Quantity(object):
             else:
                 # The unit division unboxed
                 return self.num / other.num * new_unit
-            
+        
         else:
             return Quantity(self.num / other, self.unit)
     
     def __rdiv__(self, other):
         return Quantity(other / self.num, self.unit.invert())
-            
+    
     def __eq__(self, other):
         if not compatible(self.unit, other.unit):
             return False
         else:
             return cmp(self, other) == 0
-        
+    
     def __ne__(self, other):
         return not self == other
-        
+    
     def __cmp__(self, other):
         self._ensure_same_type(other)
-        return cmp(self.num * self.unit.squeeze(),
-                other.num * other.unit.squeeze())
-                
+        return cmp(self.num * self.unit.squeeze(), other.num * other.unit.squeeze())
+    
     def __complex__(self):
         return complex(self.num)
-        
+    
     def __float__(self):
         return float(self.num)
-        
+    
     def __hex__(self):
         return hex(self.num)
-        
+    
     def __int__(self):
         return int(self.num)
-                
+    
     def __neg__(self):
         return Quantity(-self.num, self.unit)
     
@@ -121,14 +114,12 @@ class Quantity(object):
     
     def __pos__(self):
         return self.num > 0
-        
+    
     def __pow__(self, exponent):
         return Quantity(self.num ** exponent, self.unit ** exponent)
-            
+    
     def __str__(self):
         return str(self.num) + ' ' + str(self.unit)
-
+    
     def __repr__(self):
-        return ("Quantity(" + 
-                ", ".join([repr(x) for x in [self.num, self.unit]]) +
-                ")")
+        return ("Quantity(" + ", ".join([repr(x) for x in [self.num, self.unit]]) + ")")

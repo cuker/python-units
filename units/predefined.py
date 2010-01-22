@@ -6,7 +6,7 @@ from units import unit, named_unit, scaled_unit
 
 def define_units():
     """Define built-in units.
-
+    
     >>> define_units()
     >>> unit('Hz').is_si()
     True
@@ -35,7 +35,7 @@ def define_base_si_units():
     for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
         LeafUnit(sym, is_si=True)
     
-    scaled_unit('tonne', 'kg', 1000) # == 1Mg. 
+    scaled_unit('tonne', 'kg', 1000) # == 1Mg.
 
 def define_complex_si_units():
     """Define SI units that are built on other SI units.
@@ -44,9 +44,9 @@ def define_complex_si_units():
     >>> unit('Hz').is_si()
     True
     """
-    for sym in ["rad", "sr"]:  
+    for sym in ["rad", "sr"]:
         LeafUnit(sym, is_si=True)
-
+    
     named_unit("Hz", [], ["s"]) #hertz
     named_unit("N", ["m", "kg"], ["s", "s"]) #Newton
     named_unit("Pa", ["N"], ["m", "m"]) #pascal
@@ -55,18 +55,18 @@ def define_complex_si_units():
     named_unit("C", ["s", "A"], []) # Coulomb
     named_unit("V", ["W"], ["A"]) # Volt
     named_unit("F", ["C"], ["V"]) # Farad
-    named_unit("Ohm", ["V"], ["A"]) 
+    named_unit("Ohm", ["V"], ["A"])
     named_unit("S", ["A"], ["V"])   #Siemens
     named_unit("Wb", ["V", "s"], []) # Weber
     named_unit("T", ["Wb"], ["m", "m"]) # Tesla
     named_unit("H", ["Wb"], ["A"]) # Henry
-    named_unit("lm", ["cd", "sr"], []) # lumen 
+    named_unit("lm", ["cd", "sr"], []) # lumen
     named_unit("lx", ["lm"], ["m", "m"]) #lux
     named_unit("Bq", [], ["s"]) # Becquerel
     named_unit("Gy", ["J"], ["kg"]) # Gray
     named_unit("Sv", ["J"], ["kg"]) # Sievert
     named_unit("kat", ["mol"], ["s"]) # Katal
-    
+
 def define_time_units():
     """Define some common time units.
     
@@ -92,7 +92,7 @@ def define_time_units():
     scaled_unit('h', 'min', 60.)
     scaled_unit('day', 'h', 24.)
     scaled_unit('wk', 'day', 7.)
-    
+
 def define_volumes():
     """Define some common kitchen volumes.
     
@@ -106,12 +106,12 @@ def define_volumes():
     """
     # Dangerous unit, 3L gives a long int.
     assert unit('m').is_si()
-    NamedComposedUnit("L", unit("dm") ** 3, is_si=True)     
+    NamedComposedUnit("L", unit("dm") ** 3, is_si=True)
     
     scaled_unit('tsp', 'mL', 5)
     scaled_unit('tbsp', 'mL', 15)
     scaled_unit('cups', 'mL', 240)
-    
+
 def define_imperial_units():
     """Define some common imperial units."""
     
@@ -121,12 +121,12 @@ def define_imperial_units():
     scaled_unit('inch', 'cm', 2.54) # 'in' is a python keyword
     scaled_unit('ft', 'inch', 12) # foot
     scaled_unit('yd', 'ft', 3) # yard
-    scaled_unit('fathom', 'ft', 6) 
+    scaled_unit('fathom', 'ft', 6)
     scaled_unit('rd', 'yd', 5.5) # rod
     scaled_unit('fur', 'rd', 40) # furlong
     scaled_unit('mi', 'fur', 8) # mile
     scaled_unit('league', 'mi', 3)
-
+    
     # nautical scaled_unit measures
     scaled_unit('NM', 'm', 1852) # Nautical mile
     scaled_unit('cable', 'NM', 0.1)
@@ -136,21 +136,21 @@ def define_imperial_units():
     scaled_unit('ch', 'li', 100) # chain
     
     # area measure
-    NamedComposedUnit('acre',
-                      ComposedUnit([unit('rd'), unit('rd')],
-                                   [],
-                                   160))
-                                   
+    NamedComposedUnit(
+        'acre',
+        ComposedUnit([unit('rd'), unit('rd')], [], 160)
+    )
+    
     # liquid measures
-    NamedComposedUnit('pt', 
-                      ComposedUnit([unit('inch')] * 3,
-                                   [],
-                                   28.875)) # pint
+    NamedComposedUnit(
+        'pt',
+        ComposedUnit([unit('inch')] * 3, [], 28.875)
+    ) # pint
     
     scaled_unit('gi', 'pt', 0.25) # gills
     scaled_unit('qt', 'pt', 2) # quarts
     scaled_unit('gal', 'qt', 4) # gallons
-
+    
     scaled_unit('fl oz', 'pt', 1.0 / 16)
     scaled_unit('fl dr', 'fl oz', 1.0 / 8)
     scaled_unit('minim', 'fl dr', 1.0 / 60)
@@ -181,7 +181,7 @@ def define_astronomical_units():
     scaled_unit('ly', 'm', 9460730472580800) # light-year
     scaled_unit('AU', 'm', 149597870691) # Astronomical unit
     scaled_unit('pc', 'm', 3.08568025 * 10 ** 16, is_si=True) # parsec
-    
+
 def define_computer_units():
     """Define some units for technology.
     
@@ -189,7 +189,7 @@ def define_computer_units():
     >>> unit('GiB')(200) > unit('GB')(200) # bastard marketers
     True
     """
-
+    
     NamedComposedUnit('flop', unit('operation') / unit('s'), is_si=True)
     scaled_unit('B', 'bit', 8, is_si=True)  # byte
     scaled_unit('KiB', 'B', 1024)
@@ -213,8 +213,8 @@ def define_ridiculous_units():
     scaled_unit('smoot', 'cm', 170)
     
     scaled_unit('hiroshima', 'J', 6.3 * 10 ** 13)
-        
+    
     scaled_unit('bottle', 'mL', 355)
-    scaled_unit('keg', 'L', 50)    
-
+    scaled_unit('keg', 'L', 50)
+        
         

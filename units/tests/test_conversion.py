@@ -8,7 +8,7 @@ from units.registry import REGISTRY
 
 def test_valid_named_to_basic():
     """Named units should convert to their basic equivalents"""
-        
+    
     kilometre = unit('km')
     one_km_in_m = unit('m')(Quantity(1, kilometre))
     
@@ -24,10 +24,10 @@ def test_valid_named_to_composed():
     
     assert one_hz_in_per_second == Quantity(1, hertz)
     assert str(one_hz_in_per_second) == '1 1 / s'
-    
-def test_valid_named_to_named():
-    """Named units should convert to named equivalents."""    
 
+def test_valid_named_to_named():
+    """Named units should convert to named equivalents."""
+    
     gray = unit('Gy')
     sievert = unit('Sv')
     
@@ -40,7 +40,7 @@ def test_valid_basic_to_basic():
     metre = unit('m')
     
     assert metre(Quantity(1, metre)) == Quantity(1, metre)
-    
+
 def test_valid_basic_to_composed():
     """Test conversion to composed units."""
     composed_cm = unit('cm').composed_unit
@@ -65,7 +65,7 @@ def test_valid_composed_to_basic():
     hundred_cm_in_metres = metre(Quantity(100, unit('cm')))
     assert hundred_cm_in_metres == Quantity(1.0, metre)
     assert str(hundred_cm_in_metres) == '1.0 m'
-    
+
 def test_valid_composed_to_composed():
     """Valid composed units in terms of others."""
     metric_vel = unit('km') / unit('h')
@@ -77,27 +77,26 @@ def test_valid_composed_to_composed():
     assert str(highway_kph) == '100 km / h'
     assert str(highway_mph) == '62.1371192237 mi / h'
     
-    assert within_epsilon(imp_vel(highway_kph), 
-                          highway_mph)
-
+    assert within_epsilon(imp_vel(highway_kph), highway_mph)
+    
     assert str(imp_vel(highway_kph)) == '62.1371192237 mi / h'
 
 def test_valid_composed_to_named():
     """Composed units should convert to named equivalents."""
-    hertz = unit('Hz')    
+    hertz = unit('Hz')
     per_second = hertz.composed_unit
     
     one_hz = hertz(Quantity(1, per_second))
-
-    assert one_hz == Quantity(1, hertz)
-    assert str(one_hz) == '1 Hz'    
     
+    assert one_hz == Quantity(1, hertz)
+    assert str(one_hz) == '1 Hz'
+
 def test_convert_from_num():
     """Nums should convert into quantities."""
     
     metre = unit('m')
     assert metre(3) == Quantity(3, metre)
-    
+
 def setup_module(module):
     # Disable warning about not using module.
     # pylint: disable-msg=W0613

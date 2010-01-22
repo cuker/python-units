@@ -29,8 +29,7 @@ PREFIXES = {
 
 def prefixed(unit_str):
     """True iff the given string is prefixed by an SI prefix."""
-    return ((unit_str[0:2] in PREFIXES and len(unit_str) > 2) or 
-           (unit_str[0] in PREFIXES and len(unit_str) > 1))
+    return ((unit_str[0:2] in PREFIXES and len(unit_str) > 2) or (unit_str[0] in PREFIXES and len(unit_str) > 1))
 
 
 def multiplier(unit_str):
