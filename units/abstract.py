@@ -7,7 +7,7 @@ from units.quantity import Quantity
 class AbstractUnit(object):
     """Parent class/interface for units."""
     
-    def __init__(self, is_si):
+    def __init__(self, is_si=False):
         self._si = is_si
     
     def __call__(self, quantity):

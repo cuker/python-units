@@ -119,7 +119,10 @@ class Quantity(object):
         return Quantity(self.num ** exponent, self.unit ** exponent)
     
     def __str__(self):
-        return str(self.num) + ' ' + str(self.unit)
+        return '%(num)f %(unit)s' % {'num': self.num, 'unit': self.unit}
     
     def __repr__(self):
-        return ("Quantity(" + ", ".join([repr(x) for x in [self.num, self.unit]]) + ")")
+        return '%(name)s(%(params)s)' % {
+            'name': self.__class__.__name__,
+            'params': ', '.join([repr(x) for x in [self.num, self.unit]])
+        }

@@ -116,7 +116,10 @@ class ComposedUnit(AbstractUnit):
             return ' * '.join([str(x) for x in self.numer])
     
     def __repr__(self):
-        return ("ComposedUnit(" + ", ".join([repr(x) for x in [self.orig_numer, self.orig_denom, self.orig_multiplier]]) + ")")
+        return '%(name)s(%(params)s)' % {
+            'name': self.__class__.__name__,
+            'params': ', '.join([repr(x) for x in [self.orig_numer, self.orig_denom, self.orig_multiplier]])
+        }
     
     def canonical(self):
         """Return an immutable, comparable version of this unit,

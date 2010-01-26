@@ -7,6 +7,16 @@ from units.registry import REGISTRY
 class NamedComposedUnit(AbstractUnit):
     """A NamedComposedUnit is a composed unit with its own symbol."""
     
+    def get_specifier(self):
+        """The key for the composed unit"""
+        return self._specifier
+    specifier = property(get_specifier)
+    
+    def get_symbal(self):
+        """The symbal for the composed unit"""
+        return self._symbal
+    symbal = property(get_symbal)
+    
     def get_name(self):
         """The label for the composed unit"""
         return self._name
@@ -17,18 +27,23 @@ class NamedComposedUnit(AbstractUnit):
         return self._composed_unit
     composed_unit = property(get_composed_unit)
     
-    def __new__(cls, name, composed_unit, is_si=False):
+    def __new__(cls, specifier, composed_unit, symbal=u'', name=u'', is_si=False):
         """Give a composed unit a new symbol."""
         # pylint: disable-msg=W0613
         
-        if name not in REGISTRY:
-            REGISTRY[name] = super(NamedComposedUnit, cls).__new__(cls)
-        return REGISTRY[name]
+        if specifier not in REGISTRY:
+            REGISTRY[specifier] = super(NamedComposedUnit, cls).__new__(cls)
+        return REGISTRY[specifier]
     
-    def __init__(self, name, composed_unit, is_si=False):
+    def __init__(self, specifier, composed_unit, symbal=u'', name=u'', is_si=False):
         super(NamedComposedUnit, self).__init__(is_si)
-        self._name = name
+        self._specifier = specifier
         self._composed_unit = composed_unit
+        if symbal:
+            self._symbal = symbal
+        else:
+            self._symbal = specifier
+        self._name = name
     
     def invert(self):
         """Return the invert of the underlying composed unit."""
@@ -51,7 +66,10 @@ class NamedComposedUnit(AbstractUnit):
     __str__ = get_name
     
     def __repr__(self):
-        return ("NamedComposedUnit(" + ", ".join([repr(x) for x in [self.name, self.composed_unit, self.is_si()]])+ ")")
+        return '%(name)s(%(params)s)' % {
+            'name': self.__class__.__name__,
+            'params': ', '.join([repr(x) for x in [self.name, self.composed_unit, self.is_si()]])
+        }
     
     def __eq__(self, other):
         return self.composed_unit == other or other == self.composed_unit

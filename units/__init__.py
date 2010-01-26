@@ -191,15 +191,15 @@ def unit(specifier):
     if units.si.can_make(specifier):
         return si_prefixed_unit(specifier)
     else:
-        return LeafUnit(specifier, is_si=False)
+        return LeafUnit(specifier)
 
-def named_unit(symbol, numer, denom, multiplier=1, is_si=True):
+def named_unit(specifier, numer, denom, multiplier=1, symbal=u'', name=u'', is_si=True):
     """Shortcut to create and return a new named unit."""
     
     numer_units = [unit(x) for x in numer]
     denom_units = [unit(x) for x in denom]
     
-    return NamedComposedUnit(symbol, ComposedUnit(numer_units, denom_units, multiplier), is_si)
+    return NamedComposedUnit(specifier, ComposedUnit(numer_units, denom_units, multiplier), is_si)
 
 def scaled_unit(new_symbol, base_symbol, multiplier, is_si=False):
     """Shortcut to create and return a new unit that is

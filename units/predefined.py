@@ -31,9 +31,15 @@ def define_base_si_units():
     >>> unit('m').is_si()
     True
     """
-    # meter, gram, second, ampere, kelvin, mole, candela
-    for sym in ["m", "g", "s", "A", "K", "mol", "cd"]:
-        LeafUnit(sym, is_si=True)
+    # Grabed from http://en.wikipedia.org/wiki/Conversion_of_units
+    # TODO: Are these names differnet in another language?
+    LeafUnit('m', name='metre', is_si=True) # Length, area, volume
+    LeafUnit('kg', name='kilogram', is_si=True) # Mass, Density
+    LeafUnit('s', name='second', is_si=True) # Time
+    LeafUnit('A', name='ampere', is_si=True) # Electric Current
+    LeafUnit('K', name='kelvin', is_si=True) # Temperature
+    LeafUnit('mol', name='mole', is_si=True)
+    LeafUnit('cd', name='candela', is_si=True) # Luminous intensity
     
     scaled_unit('tonne', 'kg', 1000) # == 1Mg.
 
@@ -44,28 +50,28 @@ def define_complex_si_units():
     >>> unit('Hz').is_si()
     True
     """
-    for sym in ["rad", "sr"]:
-        LeafUnit(sym, is_si=True)
+    LeafUnit('rad', name='radian', is_si=True) # Plane angle
+    LeafUnit('sr', name='steradian', is_si=True)  #Solid angle
     
-    named_unit("Hz", [], ["s"]) #hertz
-    named_unit("N", ["m", "kg"], ["s", "s"]) #Newton
-    named_unit("Pa", ["N"], ["m", "m"]) #pascal
-    named_unit("J", ["N", "m"], []) #Joule # Dangerous, 3J is a complex number
-    named_unit("W", ["J"], ["s"]) # Watt
-    named_unit("C", ["s", "A"], []) # Coulomb
-    named_unit("V", ["W"], ["A"]) # Volt
-    named_unit("F", ["C"], ["V"]) # Farad
-    named_unit("Ohm", ["V"], ["A"])
-    named_unit("S", ["A"], ["V"])   #Siemens
-    named_unit("Wb", ["V", "s"], []) # Weber
-    named_unit("T", ["Wb"], ["m", "m"]) # Tesla
-    named_unit("H", ["Wb"], ["A"]) # Henry
-    named_unit("lm", ["cd", "sr"], []) # lumen
-    named_unit("lx", ["lm"], ["m", "m"]) #lux
-    named_unit("Bq", [], ["s"]) # Becquerel
-    named_unit("Gy", ["J"], ["kg"]) # Gray
-    named_unit("Sv", ["J"], ["kg"]) # Sievert
-    named_unit("kat", ["mol"], ["s"]) # Katal
+    named_unit('Hz', [], ['s']) #hertz
+    named_unit('N', ['m', 'kg'], ['s', 's']) #Newton
+    named_unit('Pa', ['N'], ['m', 'm']) #pascal
+    named_unit('J', ['N', 'm'], []) #Joule # Dangerous, 3J is a complex number
+    named_unit('W', ['J'], ['s']) # Watt
+    named_unit('C', ['s', 'A'], []) # Coulomb
+    named_unit('V', ['W'], ['A']) # Volt
+    named_unit('F', ['C'], ['V']) # Farad
+    named_unit('Ohm', ['V'], ['A'])
+    named_unit('S', ['A'], ['V'])   #Siemens
+    named_unit('Wb', ['V', 's'], []) # Weber
+    named_unit('T', ['Wb'], ['m', 'm']) # Tesla
+    named_unit('H', ['Wb'], ['A']) # Henry
+    named_unit('lm', ['cd', 'sr'], []) # lumen
+    named_unit('lx', ['lm'], ['m', 'm']) #lux
+    named_unit('Bq', [], ['s']) # Becquerel
+    named_unit('Gy', ['J'], ['kg']) # Gray
+    named_unit('Sv', ['J'], ['kg']) # Sievert
+    named_unit('kat', ['mol'], ['s']) # Katal
 
 def define_time_units():
     """Define some common time units.
@@ -106,7 +112,7 @@ def define_volumes():
     """
     # Dangerous unit, 3L gives a long int.
     assert unit('m').is_si()
-    NamedComposedUnit("L", unit("dm") ** 3, is_si=True)
+    NamedComposedUnit('L', unit('dm') ** 3, is_si=True)
     
     scaled_unit('tsp', 'mL', 5)
     scaled_unit('tbsp', 'mL', 15)
