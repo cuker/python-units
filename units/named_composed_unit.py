@@ -30,7 +30,6 @@ class NamedComposedUnit(AbstractUnit):
     def __new__(cls, specifier, composed_unit, symbal=u'', name=u'', is_si=False):
         """Give a composed unit a new symbol."""
         # pylint: disable-msg=W0613
-        
         if specifier not in REGISTRY:
             REGISTRY[specifier] = super(NamedComposedUnit, cls).__new__(cls)
         return REGISTRY[specifier]
@@ -68,7 +67,7 @@ class NamedComposedUnit(AbstractUnit):
     def __repr__(self):
         return '%(name)s(%(params)s)' % {
             'name': self.__class__.__name__,
-            'params': ', '.join([repr(x) for x in [self.name, self.composed_unit, self.is_si()]])
+            'params': ', '.join([repr(x) for x in [self.specifier, self.composed_unit, self.symbal, self.name, self.is_si()]])
         }
     
     def __eq__(self, other):

@@ -178,7 +178,7 @@ from units.leaf_unit import LeafUnit
 from units.named_composed_unit import NamedComposedUnit
 from units.registry import REGISTRY
 
-def unit(specifier):
+def unit(specifier, symbal=u'', name=u'', is_si=False):
     """Main factory for units.
     
     >>> unit('m') == unit('m')
@@ -188,10 +188,10 @@ def unit(specifier):
     """
     if specifier in REGISTRY:
         return REGISTRY[specifier]
-    if units.si.can_make(specifier):
-        return si_prefixed_unit(specifier)
+    elif units.si.can_make(specifier):
+        return units.si.prefixed_unit(specifier)
     else:
-        return LeafUnit(specifier)
+        return LeafUnit(specifier, symbal, name, is_si)
 
 def named_unit(specifier, numer, denom, multiplier=1, symbal=u'', name=u'', is_si=True):
     """Shortcut to create and return a new named unit."""
@@ -199,15 +199,9 @@ def named_unit(specifier, numer, denom, multiplier=1, symbal=u'', name=u'', is_s
     numer_units = [unit(x) for x in numer]
     denom_units = [unit(x) for x in denom]
     
-    return NamedComposedUnit(specifier, ComposedUnit(numer_units, denom_units, multiplier), is_si)
+    return NamedComposedUnit(specifier, ComposedUnit(numer_units, denom_units, multiplier), symbal, name, is_si)
 
-def scaled_unit(new_symbol, base_symbol, multiplier, is_si=False):
+def scaled_unit(specifier, base_specifier, multiplier, symbal=u'', name=u'', is_si=False):
     """Shortcut to create and return a new unit that is
     a scaled_unit multiplication of another."""
-    return NamedComposedUnit(new_symbol, ComposedUnit([unit(base_symbol)], [], multiplier), is_si)
-
-def si_prefixed_unit(unit_str):
-    """Create a unit object from the given SI-unit string."""
-    assert units.si.can_make(unit_str)
-    return scaled_unit(unit_str, units.si.without_prefix(unit_str), units.si.multiplier(unit_str))
-
+    return NamedComposedUnit(specifier, ComposedUnit([unit(base_specifier)], [], multiplier), symbal, name, is_si)
